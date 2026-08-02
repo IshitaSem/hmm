@@ -28,11 +28,14 @@
         <div class="nav-container">
             <!-- Brand Name -->
             <a class="nav-brand" href="index.html">GLAM AURA</a>
-
-            <!-- Cart Icon -->
-            <div class="cart-icon">
-                <span class="material-symbols-outlined">shopping_cart</span>
-                <span class="cart-count" id="cartCount">0</span>
+            
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="shopping-guide.html" style="font-family: 'Elms Sans', sans-serif; font-weight: 700; color: #3b1717; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;">Shopping Guide</a>
+                <!-- Cart Icon -->
+                <div class="cart-icon">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
             </div>
         </div>
     </nav>
@@ -231,6 +234,32 @@
             <div class="product-modal-footer">
                 <button class="cart-action-btn secondary" id="modalCloseButton">Close</button>
                 <button class="cart-action-btn primary" id="modalAddCartButton">Add to cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcomePopupOverlay" class="welcome-popup-overlay">
+        <div class="welcome-popup">
+            <button class="welcome-popup-close" id="welcomePopupClose">×</button>
+            <div class="welcome-popup-icon">🎁</div>
+            <h2 class="welcome-popup-title">Welcome to Our Gift Hamper Store!</h2>
+            <p class="welcome-popup-text">Thank you for visiting our website!</p>
+            <p class="welcome-popup-text">Before creating your perfect hamper, please take a minute to read our Shopping Guide.</p>
+            <p class="welcome-popup-text" style="text-align: left; margin-top: 1rem;">It explains:</p>
+            <ul class="welcome-popup-list">
+                <li>How to build your hamper</li>
+                <li>Payment process</li>
+                <li>Invoice generation</li>
+                <li>Custom requests</li>
+                <li>Important ordering instructions</li>
+            </ul>
+            <div class="welcome-popup-buttons">
+                <button class="cart-action-btn primary" onclick="window.location.href='shopping-guide.html'">📖 Read Shopping Guide</button>
+                <button class="cart-action-btn secondary" id="welcomePopupContinue">🛍 Continue Shopping</button>
+            </div>
+            <div class="welcome-popup-checkbox">
+                <input type="checkbox" id="dontShowAgain">
+                <label for="dontShowAgain">Don't show this again</label>
             </div>
         </div>
     </div>

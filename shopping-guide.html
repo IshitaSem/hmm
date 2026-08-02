@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Guide - Glam Aura</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Brand Name -->
+            <a class="nav-brand" href="index.html">GLAM AURA</a>
+            
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="shopping-guide.html" style="font-family: 'Elms Sans', sans-serif; font-weight: 700; color: #3b1717; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;">Shopping Guide</a>
+                <!-- Cart Icon -->
+                <div class="cart-icon" onclick="window.location.href='index.html'">
+                    <i class="fas fa-shopping-cart" style="font-size: 1.25rem; color: #333;"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <a href="index.html" class="guide-back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <main class="container">
+        <header class="guide-header">
+            <h1 class="guide-title">📖 How to Order Your Custom Hamper</h1>
+            <p class="guide-subtitle">Creating your perfect gift hamper is easy! Follow these simple steps for a smooth ordering experience.</p>
+        </header>
+
+        <div class="guide-timeline">
+            <!-- Step 1 -->
+            <div class="guide-step">
+                <div class="guide-step-number">1</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">🎁</div>
+                        <h2 class="guide-card-title">Build Your Hamper</h2>
+                    </div>
+                    <p class="guide-card-desc">Browse our collection and select the items you'd like to include.</p>
+                    <p class="guide-card-desc">Mix and match products to create your perfect gift hamper.</p>
+                    <div class="guide-warning">
+                        ❌ Don't exceed the hamper capacity if a maximum item limit is mentioned.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="guide-step">
+                <div class="guide-step-number">2</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">🛒</div>
+                        <h2 class="guide-card-title">Review Your Selection</h2>
+                    </div>
+                    <p class="guide-card-desc">Before continuing:</p>
+                    <ul class="guide-card-list">
+                        <li>Check selected products</li>
+                        <li>Verify quantities</li>
+                        <li>Confirm prices</li>
+                    </ul>
+                    <div class="guide-warning">
+                        ❌ Don't proceed without reviewing your cart.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="guide-step">
+                <div class="guide-step-number">3</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">📝</div>
+                        <h2 class="guide-card-title">Enter Delivery Details</h2>
+                    </div>
+                    <p class="guide-card-desc">Fill in:</p>
+                    <ul class="guide-card-list">
+                        <li>Full Name</li>
+                        <li>Email</li>
+                        <li>Phone Number</li>
+                        <li>Delivery Address</li>
+                        <li>City</li>
+                        <li>State</li>
+                        <li>Pincode</li>
+                        <li>Delivery Date</li>
+                        <li>Recipient Name (optional)</li>
+                        <li>Gift Message (optional)</li>
+                        <li>Special Instructions (optional)</li>
+                    </ul>
+                    <div class="guide-warning">
+                        ❌ Incorrect details may delay your order.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="guide-step">
+                <div class="guide-step-number">4</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">🧾</div>
+                        <h2 class="guide-card-title">Generate Invoice</h2>
+                    </div>
+                    <p class="guide-card-desc">Click Generate Invoice. The invoice will include:</p>
+                    <ul class="guide-card-list">
+                        <li>Customer Details</li>
+                        <li>Delivery Address</li>
+                        <li>Selected Items</li>
+                        <li>Product Images</li>
+                        <li>Quantity</li>
+                        <li>Prices</li>
+                        <li>Grand Total</li>
+                    </ul>
+                    <div class="guide-warning">
+                        ❌ Review everything before making payment.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="guide-step">
+                <div class="guide-step-number">5</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">💳</div>
+                        <h2 class="guide-card-title">Make Payment</h2>
+                    </div>
+                    <p class="guide-card-desc">Scan the QR Code displayed on the invoice. Or use the provided UPI ID.</p>
+                    <p class="guide-card-desc">Complete the payment.</p>
+                    <div class="guide-warning" style="margin-bottom: 0.5rem;">
+                        ❌ Don't make partial payments.
+                    </div>
+                    <div class="guide-warning">
+                        ❌ Only pay using the displayed UPI ID.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6 -->
+            <div class="guide-step">
+                <div class="guide-step-number">6</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">📸</div>
+                        <h2 class="guide-card-title">Contact Us</h2>
+                    </div>
+                    <p class="guide-card-desc">After payment you can:</p>
+                    <ul class="guide-card-list">
+                        <li>Download your invoice</li>
+                        <li>Print your invoice</li>
+                        <li>Contact us on Instagram</li>
+                        <li>Share your invoice if needed</li>
+                        <li>Discuss additional customization</li>
+                    </ul>
+                    <div class="guide-warning">
+                        ❌ Mention your Invoice Number while contacting us.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 7 -->
+            <div class="guide-step">
+                <div class="guide-step-number">7</div>
+                <div class="guide-card">
+                    <div class="guide-card-header">
+                        <div class="guide-card-icon">🎀</div>
+                        <h2 class="guide-card-title">Custom Requests</h2>
+                    </div>
+                    <p class="guide-card-desc">Want something unique? You can request:</p>
+                    <ul class="guide-card-list">
+                        <li>Different ribbon colors</li>
+                        <li>Theme-based hampers</li>
+                        <li>Custom gift messages</li>
+                        <li>Personalized items</li>
+                        <li>Special decorations</li>
+                        <li>Additional products</li>
+                    </ul>
+                    <p class="guide-card-desc">Mention these in the Special Instructions section or contact us on Instagram.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="guide-help-card">
+            <h2 class="guide-help-title">🌸 Need Help?</h2>
+            <div class="guide-help-grid">
+                <div class="guide-help-item">
+                    <i class="fab fa-instagram" style="font-size: 1.5rem;"></i> <span class="dynamic-insta-text">@theglam._.aura</span>
+                </div>
+                <div class="guide-help-item">
+                    <i class="fas fa-envelope" style="font-size: 1.5rem;"></i> hello@glamaura.com
+                </div>
+                <div class="guide-help-item">
+                    <i class="fas fa-phone" style="font-size: 1.5rem;"></i> +91 9876543210
+                </div>
+            </div>
+            <a href="#" target="_blank" rel="noreferrer" class="guide-help-btn dynamic-insta-link">
+                <i class="fab fa-instagram"></i> Message on Instagram
+            </a>
+        </div>
+
+        <footer class="site-footer">
+            <p>Made with care for your hamper moments.</p>
+            <p>© 2026 Glam Aura</p>
+            <a class="instagram-link dynamic-insta-link" href="#" target="_blank" rel="noreferrer">
+                <i class="fab fa-instagram"></i> DM on Instagram
+            </a>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Scroll reveal animation for steps
+        document.addEventListener('DOMContentLoaded', () => {
+            const steps = document.querySelectorAll('.guide-step');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            steps.forEach((step, index) => {
+                // Add a slight delay based on index for a cascading effect if multiple steps are visible
+                step.style.transitionDelay = `${index * 0.1}s`;
+                observer.observe(step);
+            });
+            
+            // Trigger first few immediately if they are in viewport
+            setTimeout(() => {
+                steps.forEach(step => {
+                    const rect = step.getBoundingClientRect();
+                    if (rect.top < window.innerHeight) {
+                        step.classList.add('reveal');
+                    }
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>

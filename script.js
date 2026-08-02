@@ -1,3 +1,6 @@
+const INSTAGRAM_URL = "https://www.instagram.com/theglam._.aura";
+const INSTAGRAM_HANDLE = "@theglam._.aura";
+
 // Navigation behavior
 const cartCountEl = document.getElementById('cartCount');
 const cartIcon = document.querySelector('.cart-icon');
@@ -103,17 +106,29 @@ function formatPrice(price) {
     return `₹${price}`;
 }
 
+// Escapes user-controlled text before it is inserted via innerHTML, to
+// prevent stored XSS (e.g. from the custom hamper name/note fields).
+// Shared with invoice.js, which is loaded after this file on checkout.html.
+function escapeHtml(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function createCartItemHtml(item) {
     return `
-        <div class="cart-item" data-item-id="${item.id}">
+        <div class="cart-item" data-item-id="${escapeHtml(item.id)}">
             <div class="cart-item-info">
-                <div class="cart-item-title">${item.name}</div>
+                <div class="cart-item-title">${escapeHtml(item.name)}</div>
                 <div class="cart-item-price">${formatPrice(item.price)}</div>
             </div>
             <div class="cart-item-quantity">
-                <button class="qty-btn minus" data-item-id="${item.id}">−</button>
+                <button class="qty-btn minus" data-item-id="${escapeHtml(item.id)}">−</button>
                 <span class="qty-display">${item.quantity}</span>
-                <button class="qty-btn plus" data-item-id="${item.id}">+</button>
+                <button class="qty-btn plus" data-item-id="${escapeHtml(item.id)}">+</button>
             </div>
             ${item.isCustom ? `<div class="cart-item-edit"><button class="edit-custom-btn" onclick="window.location.href='custom-hamper.html?edit=${encodeURIComponent(item.id)}'">Edit</button></div>` : ''}
         </div>
@@ -578,10 +593,10 @@ function populateCheckoutPage() {
     container.innerHTML = cart.items.map(item => `
         <article class="product-card" style="cursor:default;">
             <div class="product-image">
-                <img src="${item.image || productImages[item.name] || ''}" alt="${item.name}">
+                <img src="${escapeHtml(item.image || productImages[item.name] || '')}" alt="${escapeHtml(item.name)}">
             </div>
             <div>
-                <div class="product-title">${item.name}</div>
+                <div class="product-title">${escapeHtml(item.name)}</div>
                 <div class="product-price">${formatPrice(item.price)} x ${item.quantity}</div>
                 <p class="product-description">Quantity: ${item.quantity}</p>
             </div>
@@ -612,34 +627,119 @@ function populateCheckoutPage() {
     if (grandTotalEl) grandTotalEl.textContent = formatPrice(total + deliveryFee);
 }
 
-// Hook up validation intercept and trigger gateway
+// Welcome Popup Logic
+function setupWelcomePopup() {
+    const popupOverlay = document.getElementById('welcomePopupOverlay');
+    const closeBtn = document.getElementById('welcomePopupClose');
+    const continueBtn = document.getElementById('welcomePopupContinue');
+    const dontShowAgainCheckbox = document.getElementById('dontShowAgain');
+
+    if (!popupOverlay) return;
+
+    // Check if dismissed
+    const isDismissed = localStorage.getItem('welcomePopupDismissed');
+
+    if (!isDismissed) {
+        // Show after 0.8-1 second
+        setTimeout(() => {
+            popupOverlay.classList.add('active');
+        }, 900);
+    }
+
+    const dismissPopup = () => {
+        popupOverlay.classList.remove('active');
+        if (dontShowAgainCheckbox && dontShowAgainCheckbox.checked) {
+            localStorage.setItem('welcomePopupDismissed', 'true');
+        } else {
+            // Also dismiss normally so it acts as "only appears once unless user clears browser data" as requested
+            localStorage.setItem('welcomePopupDismissed', 'true');
+        }
+    };
+
+    if (closeBtn) closeBtn.addEventListener('click', dismissPopup);
+    if (continueBtn) continueBtn.addEventListener('click', dismissPopup);
+    
+    // Close on click outside
+    popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) dismissPopup();
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popupOverlay.classList.contains('active')) {
+            dismissPopup();
+        }
+    });
+}
+
+// Shopping Guide Instagram Links
+function setupInstagramLinks() {
+    const instaLinks = document.querySelectorAll('.dynamic-insta-link');
+    instaLinks.forEach(link => {
+        link.href = INSTAGRAM_URL;
+    });
+    const instaText = document.querySelectorAll('.dynamic-insta-text');
+    instaText.forEach(text => {
+        text.textContent = INSTAGRAM_HANDLE;
+    });
+}
+
+setupWelcomePopup();
+setupInstagramLinks();
+
+// Hook up form submission to generate the invoice (GitHub Pages compatible, client-side only)
 document.getElementById('customerDetailsForm')?.addEventListener('submit', function(e) {
     e.preventDefault(); // Prevents empty native form reloads
-    
+
     const cart = loadCart();
     if (cart.items.length === 0) {
         alert("Your cart is empty!");
         return;
     }
 
-    const totalAmount = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    
-    // Gather collected data objects
+    // Gather all collected customer + delivery + gift data
     const customerData = {
-        name: document.getElementById('custName').value,
-        email: document.getElementById('custEmail').value,
-        whatsapp: document.getElementById('custWhatsApp').value,
-        receiverPhone: document.getElementById('receiverPhone').value,
-        address: `${document.getElementById('addressHouse').value}, ${document.getElementById('addressSector').value}, ${document.getElementById('addressState').value} - ${document.getElementById('addressPincode').value}`,
-        note: document.getElementById('checkoutNote').value
+        name: document.getElementById('custName')?.value || '',
+        email: document.getElementById('custEmail')?.value || '',
+        whatsapp: document.getElementById('custWhatsApp')?.value || '',
+        receiverPhone: document.getElementById('receiverPhone')?.value || '',
+        house: document.getElementById('addressHouse')?.value || '',
+        street: document.getElementById('addressSector')?.value || '',
+        landmark: document.getElementById('addressLandmark')?.value || '',
+        city: document.getElementById('custCity')?.value || '',
+        state: document.getElementById('addressState')?.value || '',
+        pincode: document.getElementById('addressPincode')?.value || '',
+        deliveryDate: document.getElementById('deliveryDate')?.value || '',
+        deliveryTime: document.getElementById('deliveryTime')?.value || '',
+        occasion: document.getElementById('occasion')?.value || '',
+        recipientName: document.getElementById('recipientName')?.value || '',
+        giftMessage: document.getElementById('giftMessage')?.value || '',
+        specialRequests: document.getElementById('specialRequests')?.value || '',
+        note: document.getElementById('checkoutNote')?.value || ''
     };
 
-    initiateRazorpayPayment(totalAmount, customerData);
+    // Generate the invoice (defined in invoice.js)
+    if (typeof generateInvoice === 'function') {
+        generateInvoice(customerData);
+    } else {
+        alert("Invoice module is not loaded. Please check your connection and refresh.");
+    }
 });
 
+/* =====================================================================
+   LEGACY RAZORPAY + WEBHOOK FLOW (DISABLED for GitHub Pages)
+   ---------------------------------------------------------------
+   This code is kept below ONLY for easy restoration later. It requires a
+   real Razorpay key and a backend/webhook, which do not work on a static
+   GitHub Pages site. The active flow above uses the client-side invoice +
+   UPI QR section instead. To restore, swap the submit handler above back
+   to calling initiateRazorpayPayment() and uncomment the functions below.
+   ===================================================================== */
+
+/*
 function initiateRazorpayPayment(amount, customer) {
     // Razorpay works completely in minor units (Paise). ₹1 = 100 paise.
-    const paiseAmount = amount * 100; 
+    const paiseAmount = amount * 100;
 
     const options = {
         "key": "YOUR_RAZORPAY_KEY_ID", // Replace this with your test/live key from Razorpay dashboard
@@ -668,7 +768,7 @@ function initiateRazorpayPayment(amount, customer) {
 function handlePaymentSuccess(paymentId, customer) {
     // 1. Clear cart values natively
     localStorage.removeItem('glamAuraCartData');
-    
+
     // 2. Alert/show customer localized confirmation layout text
     document.getElementById('checkout').innerHTML = `
         <div style="text-align: center; padding: 3rem 1rem; font-family:'Elms Sans';">
@@ -682,9 +782,10 @@ function handlePaymentSuccess(paymentId, customer) {
     // 3. Trigger backend dispatch notifications
     sendAutomatedAlerts(customer, paymentId);
 }
+
 // APPEND THIS DIRECTLY AT THE VERY END OF YOUR ENTIRE JS FILE:
 function sendAutomatedAlerts(customer, paymentId) {
-    const webhookURL = "https://your-automation-webhook-url.com/catch"; 
+    const webhookURL = "https://your-automation-webhook-url.com/catch";
 
     fetch(webhookURL, {
         method: "POST",
@@ -700,3 +801,4 @@ function sendAutomatedAlerts(customer, paymentId) {
         })
     }).catch(err => console.log("System automation tracking link offline:", err));
 }
+*/

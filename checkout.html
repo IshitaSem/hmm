@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glam Aura - Checkout</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="invoice.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&display=swap">
@@ -53,7 +54,7 @@
             </div>
 
             <!-- 3. Customer Details Form Structure -->
-            <form id="customerDetailsForm" class="cart-note" style="margin-bottom: 2rem; margin-top: 2rem;">
+            <form id="customerDetailsForm" class="cart-note" style="margin-bottom: 2rem; margin-top: 2rem;" novalidate>
                 <h3 style="font-family:'DynaPuff'; color:#3b1717; margin-bottom:1rem;">Enter Your Details</h3>
                 <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); text-align: left;">
                     <div>
@@ -61,7 +62,7 @@
                         <input type="text" id="custName" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
                     <div>
-                        <label for="custEmail" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Gmail Address *</label>
+                        <label for="custEmail" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Email Address *</label>
                         <input type="email" id="custEmail" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
                     <div>
@@ -72,45 +73,95 @@
                         <label for="receiverPhone" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Phone Number (Person Receiving Hamper) *</label>
                         <input type="tel" id="receiverPhone" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
+                    <div>
+                        <label for="addressHouse" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">House / Flat Number *</label>
+                        <input type="text" id="addressHouse" required placeholder="House no., Flat no., Building name" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
+                    <div>
+                        <label for="addressSector" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Street / Area *</label>
+                        <input type="text" id="addressSector" required placeholder="Street, Sector, Phase, Locality" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
+                    <div>
+                        <label for="addressLandmark" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Landmark (optional)</label>
+                        <input type="text" id="addressLandmark" placeholder="Near ..." style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
+                    <div>
+                        <label for="custCity" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">City *</label>
+                        <input type="text" id="custCity" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
+                    <div>
+                        <label for="addressState" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">State *</label>
+                        <input type="text" id="addressState" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
+                    <div>
+                        <label for="addressPincode" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Pincode *</label>
+                        <input type="text" id="addressPincode" required inputmode="numeric" maxlength="6" placeholder="6-digit pincode" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
+                    <div>
+                        <label for="deliveryDate" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Delivery Date *</label>
+                        <input type="date" id="deliveryDate" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
+                    </div>
+                    <div>
+                        <label for="deliveryTime" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Delivery Time (optional)</label>
+                        <input type="time" id="deliveryTime" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
+                    </div>
+                    <div>
+                        <label for="occasion" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Occasion *</label>
+                        <select id="occasion" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
+                            <option value="">Select occasion</option>
+                            <option value="Birthday">Birthday</option>
+                            <option value="Anniversary">Anniversary</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="Valentine's Day">Valentine's Day</option>
+                            <option value="Mother's Day">Mother's Day</option>
+                            <option value="Father's Day">Father's Day</option>
+                            <option value="Diwali">Diwali</option>
+                            <option value="Festival">Festival</option>
+                            <option value="Thank You">Thank You</option>
+                            <option value="Just Because">Just Because</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="recipientName" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Recipient Name *</label>
+                        <input type="text" id="recipientName" required placeholder="Who is receiving this hamper?" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
                 </div>
 
-                <div style="margin-top: 1rem; display: grid; gap: 1rem; text-align: left;">
-                    <div>
-                        <label for="addressHouse" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">House No. / Building Number *</label>
-                        <input type="text" id="addressHouse" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
-                    </div>
-                    <div>
-                        <label for="addressSector" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Sector / Phase / Locality *</label>
-                        <input type="text" id="addressSector" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <label for="addressState" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">State *</label>
-                            <input type="text" id="addressState" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
-                        </div>
-                        <div>
-                            <label for="addressPincode" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Pincode *</label>
-                            <input type="text" id="addressPincode" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
-                        </div>
-                    </div>
-                </div>
-                
                 <div style="margin-top: 1rem;">
                     <label for="checkoutNote">Order note / Message card text</label>
                     <textarea id="checkoutNote" placeholder="Add any instructions or love note..."></textarea>
                 </div>
 
-                <!-- 4. Submit & Proceed to Payment Button -->
+                <div style="margin-top: 1rem;">
+                    <label for="giftMessage">Gift Message</label>
+                    <textarea id="giftMessage" placeholder="Write the message to be printed on the gift card..."></textarea>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <label for="specialRequests">Special Requests / Custom Instructions</label>
+                    <textarea id="specialRequests" placeholder="e.g. Please use pink wrapping paper and add a birthday card."></textarea>
+                </div>
+
+                <!-- 4. Submit & Generate Invoice Button -->
                 <div style="text-align: center; margin-top:1.5rem;">
-                    <button type="submit" class="cart-action-btn primary" id="payNowBtn" style="width: 100%; max-width: 350px;">
-                        Confirm Details & Pay
+                    <button type="submit" class="cart-action-btn primary" id="generateInvoiceBtn" style="width: 100%; max-width: 350px;">
+                        Generate Invoice
                     </button>
                 </div>
             </form>
-        </section>
 
-        <!-- Razorpay Core Checkout Integration Script Component -->
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <!-- 5. Invoice Action Toolbar -->
+            <div class="invoice-actions" id="invoiceActions" style="display:none;">
+                <button class="cart-action-btn primary" id="downloadPdfBtn" type="button">Download Invoice PDF</button>
+                <button class="cart-action-btn secondary" id="printInvoiceBtn" type="button">Print Invoice</button>
+                <button class="cart-action-btn secondary" id="instagramContactBtn" type="button">Contact on Instagram</button>
+                <button class="cart-action-btn secondary" id="backToShopBtn" type="button">Back to Shopping</button>
+            </div>
+
+            <!-- 6. Generated Invoice -->
+            <section id="invoiceSection" class="invoice-section" style="display:none;"></section>
+        </section>
     </main>
     <div id="cartSummaryBar" class="cart-summary-bar">
         <div class="cart-summary-thumb"><span class="material-symbols-outlined">shopping_cart</span></div>
@@ -169,5 +220,10 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <!-- PDF generation libraries (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Invoice generator -->
+    <script src="invoice.js"></script>
 </body>
 </html>

@@ -24,27 +24,6 @@
             font-family: 'Elms Sans', sans-serif;
             background-color: #FFE680;
         }
-        .navbar {
-            background-color: #FFFFFF;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            margin: 1rem;
-            border-radius: 40px;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-        }
-        .nav-brand {
-            font-family: 'DynaPuff', cursive;
-            font-size: 1.5rem;
-            color: #3b1717;
-            text-decoration: none;
-        }
         .custom-builder {
             max-width: 1100px;
             margin: 1rem auto 2rem;
@@ -411,9 +390,33 @@
     <nav class="navbar">
         <div class="nav-container">
             <a class="nav-brand" href="index.html">GLAM AURA</a>
-            <div></div>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="shopping-guide.html" style="font-family: 'Elms Sans', sans-serif; font-weight: 700; color: #3b1717; text-decoration: none; font-size: 1rem; transition: color 0.3s ease;">Shopping Guide</a>
+                <div class="cart-icon" onclick="window.location.href='checkout.html'">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
         </div>
     </nav>
+    <script>
+        // Minimal, self-contained cart count sync — mirrors loadCart()/getCartCount()
+        // in script.js without loading that whole file on this page.
+        (function () {
+            try {
+                var raw = localStorage.getItem('glamAuraCartData');
+                var cart = raw ? JSON.parse(raw) : { items: [] };
+                var items = (cart && cart.items) || [];
+                var count = items.reduce(function (sum, item) {
+                    return sum + (item.quantity || 0);
+                }, 0);
+                var badge = document.getElementById('cartCount');
+                if (badge) badge.textContent = count;
+            } catch (e) {
+                // Fall back to the default "0" already in the markup.
+            }
+        })();
+    </script>
 
     <main class="custom-builder">
         <div class="builder-header">
