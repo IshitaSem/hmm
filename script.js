@@ -637,13 +637,13 @@ function setupWelcomePopup() {
     if (!popupOverlay) return;
 
     // Check if dismissed
-    const isDismissed = localStorage.getItem('welcomePopupDismissed');
+    const isDismissed = localStorage.getItem('welcomePopupDismissed') || sessionStorage.getItem('welcomePopupSessionDismissed');
 
     if (!isDismissed) {
-        // Show after 0.8-1 second
+        // Show after 1 second
         setTimeout(() => {
             popupOverlay.classList.add('active');
-        }, 900);
+        }, 1000);
     }
 
     const dismissPopup = () => {
@@ -651,8 +651,8 @@ function setupWelcomePopup() {
         if (dontShowAgainCheckbox && dontShowAgainCheckbox.checked) {
             localStorage.setItem('welcomePopupDismissed', 'true');
         } else {
-            // Also dismiss normally so it acts as "only appears once unless user clears browser data" as requested
-            localStorage.setItem('welcomePopupDismissed', 'true');
+            sessionStorage.setItem('welcomePopupSessionDismissed', 'true');
+            // Remove local storage in case it was previously set and they unchecked it (though it wouldn't show if set)
         }
     };
 

@@ -1462,7 +1462,6 @@ h6 {
     position: relative;
     max-width: 800px;
     margin: 0 auto 4rem;
-    padding: 0 1rem;
 }
 
 .guide-timeline::before {
@@ -1502,7 +1501,7 @@ h6 {
     }
 }
 
-.guide-step-number {
+.step-number {
     position: absolute;
     left: 17px;
     top: 24px;
@@ -1521,7 +1520,7 @@ h6 {
 }
 
 @media (max-width: 767px) {
-    .guide-step-number {
+    .step-number {
         position: static;
         margin-bottom: 1rem;
         display: inline-flex;
@@ -1549,7 +1548,7 @@ h6 {
     margin-bottom: 1rem;
 }
 
-.guide-card-icon {
+.step-icon {
     font-size: 2rem;
 }
 
@@ -1578,7 +1577,7 @@ h6 {
     margin-bottom: 0.5rem;
 }
 
-.guide-warning {
+.warning-box {
     background: #fff0f0;
     border-left: 4px solid #ff6b6b;
     padding: 1rem;
@@ -1589,7 +1588,7 @@ h6 {
     font-weight: 600;
 }
 
-.guide-help-card {
+.support-card {
     background: linear-gradient(135deg, #f8dc8e 0%, #fff0c1 100%);
     border-radius: 32px;
     padding: 3rem 2rem;
@@ -1676,4 +1675,29 @@ h6 {
     .guide-help-item {
         justify-content: center;
     }
+}
+
+.guide-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.progress-container {
+    position: sticky;
+    top: 80px;
+    width: 100%;
+    height: 6px;
+    background: rgba(59, 23, 23, 0.1);
+    z-index: 990;
+    border-radius: 3px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #3b1717;
+    transition: width 0.2s ease;
 }

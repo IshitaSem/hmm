@@ -66,8 +66,8 @@
                         <input type="email" id="custEmail" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
                     <div>
-                        <label for="custWhatsApp" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Phone Number (For WhatsApp Updates) *</label>
-                        <input type="tel" id="custWhatsApp" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                        <label for="custWhatsApp" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Phone Number (For WhatsApp Updates)</label>
+                        <input type="tel" id="custWhatsApp" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
                     <div>
                         <label for="receiverPhone" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Phone Number (Person Receiving Hamper) *</label>
@@ -98,16 +98,16 @@
                         <input type="text" id="addressPincode" required inputmode="numeric" maxlength="6" placeholder="6-digit pincode" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
                     <div>
-                        <label for="deliveryDate" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Delivery Date *</label>
-                        <input type="date" id="deliveryDate" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
+                        <label for="deliveryDate" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Delivery Date</label>
+                        <input type="date" id="deliveryDate" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
                     </div>
                     <div>
                         <label for="deliveryTime" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Delivery Time (optional)</label>
                         <input type="time" id="deliveryTime" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
                     </div>
                     <div>
-                        <label for="occasion" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Occasion *</label>
-                        <select id="occasion" required style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
+                        <label for="occasion" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Occasion</label>
+                        <select id="occasion" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans'; color:#3b1717;">
                             <option value="">Select occasion</option>
                             <option value="Birthday">Birthday</option>
                             <option value="Anniversary">Anniversary</option>
@@ -123,8 +123,8 @@
                         </select>
                     </div>
                     <div>
-                        <label for="recipientName" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Recipient Name *</label>
-                        <input type="text" id="recipientName" required placeholder="Who is receiving this hamper?" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                        <label for="recipientName" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Recipient Name</label>
+                        <input type="text" id="recipientName" placeholder="Who is receiving this hamper?" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
                 </div>
 
@@ -143,11 +143,27 @@
                     <textarea id="specialRequests" placeholder="e.g. Please use pink wrapping paper and add a birthday card."></textarea>
                 </div>
 
-                <!-- 4. Submit & Generate Invoice Button -->
-                <div style="text-align: center; margin-top:1.5rem;">
-                    <button type="submit" class="cart-action-btn primary" id="generateInvoiceBtn" style="width: 100%; max-width: 350px;">
-                        Generate Invoice
-                    </button>
+                <!-- 4. Invoice & Payment Options -->
+                <div class="payment-options-section" style="margin-top: 2rem; background-color: #ffffff; padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 14px 30px rgba(0,0,0,0.03);">
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #3b1717; margin-bottom: 1.5rem; font-size: 1.3rem; text-align: center;">Invoice & Payment Options</h3>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                        <!-- Option 1 -->
+                        <button type="submit" class="cart-action-btn primary" id="generateInvoiceBtn" style="flex: 1; min-width: 200px; justify-content: center;">
+                            📄 Generate Invoice
+                        </button>
+                        
+                        <!-- Option 2 -->
+                        <button type="button" class="cart-action-btn secondary" id="payViaQRBtn" style="flex: 1; min-width: 200px; justify-content: center;" onclick="document.getElementById('qrCodeContainer').style.display = document.getElementById('qrCodeContainer').style.display === 'none' ? 'block' : 'none';">
+                            📱 Pay via QR Code
+                        </button>
+                    </div>
+
+                    <!-- QR Code Display Area -->
+                    <div id="qrCodeContainer" style="display: none; margin-top: 2rem; text-align: center;">
+                        <img src="assets/payment-qr-placeholder.png" alt="Payment QR Code" style="max-width: 250px; border-radius: 12px; border: 2px solid #f8dc8e;">
+                        <p style="font-family: 'Elms Sans', sans-serif; color: #555; font-size: 0.95rem; margin-top: 1rem;">Scan to complete your payment.</p>
+                    </div>
                 </div>
             </form>
 

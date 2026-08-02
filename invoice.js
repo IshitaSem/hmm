@@ -88,16 +88,12 @@ function formatDisplayTime(value) {
 const REQUIRED_FIELDS = [
     { key: "name", label: "Full Name", id: "custName" },
     { key: "email", label: "Email Address", id: "custEmail" },
-    { key: "whatsapp", label: "Phone Number", id: "custWhatsApp" },
     { key: "receiverPhone", label: "Receiver Phone", id: "receiverPhone" },
     { key: "house", label: "House / Flat Number", id: "addressHouse" },
     { key: "street", label: "Street / Area", id: "addressSector" },
     { key: "city", label: "City", id: "custCity" },
     { key: "state", label: "State", id: "addressState" },
-    { key: "pincode", label: "Pincode", id: "addressPincode" },
-    { key: "deliveryDate", label: "Delivery Date", id: "deliveryDate" },
-    { key: "occasion", label: "Occasion", id: "occasion" },
-    { key: "recipientName", label: "Recipient Name", id: "recipientName" }
+    { key: "pincode", label: "Pincode", id: "addressPincode" }
 ];
 
 function validateCustomerForm(data) {
