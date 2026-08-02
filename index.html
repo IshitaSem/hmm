@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glam Aura - Hamper Store</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <!-- Brand Name -->
+            <a class="nav-brand" href="index.html">GLAM AURA</a>
+
+            <!-- Cart Icon -->
+            <div class="cart-icon">
+                <span class="material-symbols-outlined">shopping_cart</span>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <section class="top-banner">
+            <div class="ticker">
+                <span>HAMPER AT ₹99&nbsp; &nbsp;&nbsp;&nbsp;HAMPER AT ₹299&nbsp;&nbsp;&nbsp;&nbsp;HAMPER AT ₹499&nbsp;&nbsp;&nbsp;&nbsp;<B>CUSTOM HAMPER AVAILABLE</B>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span>HAMPER AT ₹99&nbsp; &nbsp;&nbsp;&nbsp;HAMPER AT ₹299&nbsp;&nbsp;&nbsp;&nbsp;HAMPER AT ₹499&nbsp;&nbsp;&nbsp;&nbsp;<B>CUSTOM HAMPER AVAILABLE</B>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span>HAMPER AT ₹99&nbsp; &nbsp;&nbsp;&nbsp;HAMPER AT ₹299&nbsp;&nbsp;&nbsp;&nbsp;HAMPER AT ₹499&nbsp;&nbsp;&nbsp;&nbsp;<B>CUSTOM HAMPER AVAILABLE</B>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    
+            </div>
+        </section>
+
+        <section class="products-section" id="products">
+            <div class="products-header">
+                <h2>Minimal Hamper Shop</h2>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-row">
+                    <div class="filter-item">
+                        <select id="availabilityFilter" class="filter-dropdown-inline">
+                            <option value="all">Availability</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="out-stock">Out of Stock</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <select id="priceFilter" class="filter-dropdown-inline">
+                            <option value="all">All</option>
+                            <option value="99">₹99</option>
+                            <option value="299">₹299</option>
+                            <option value="499">₹499</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item sort-item">
+                        <select id="sortFilter" class="filter-dropdown-inline">
+                            <option value="relevance">Popular</option>
+                            <option value="price-low">Lowest to Highest</option>
+                            <option value="price-high">Highest to Lowest</option>
+                        </select>
+                    </div>
+
+                    <div class="item-count" id="itemCount">3 items</div>
+                </div>
+            </div>
+
+            <div class="product-grid">
+                <article class="product-card" data-product="Hamper 1" data-price="99" data-image="Hamper 1" data-items="Mini chocolate|Hand cream|Sticker set" data-description="A soft bundle of treats and small surprises.">
+                    <div class="product-image">
+                        <img src="assets/hamper1.jpg" alt="Hamper 1">
+                    </div>
+                    <div>
+                        <div class="product-title">Hamper 1</div>
+                        <div class="product-price">₹99</div>
+                    </div>
+                    <button class="add-cart-btn" data-product="Hamper 1" data-price="99">Add to cart</button>
+                </article>
+
+                <article class="product-card" data-product="Hamper 2" data-price="299" data-image="Hamper 2" data-items="Cozy socks|Snack jar|Note card" data-description="A richer mix of cozy accessories and snacks.">
+                    <div class="product-image">
+                        <img src="assets/hamper2.jpg" alt="Hamper 2">
+                    </div>
+                    <div>
+                        <div class="product-title">Hamper 2</div>
+                        <div class="product-price">₹299</div>
+                    </div>
+                    <button class="add-cart-btn" data-product="Hamper 2" data-price="299">Add to cart</button>
+                </article>
+
+                <article class="product-card" data-product="Hamper 3" data-price="499" data-image="Hamper 3" data-items="Premium candle|Sweet biscuits|Gift tag" data-description="A premium selection for thoughtful gifting.">
+                    <div class="product-image">
+                        <img src="assets/hamper3.jpg" alt="Hamper 3">
+                    </div>
+                    <div>
+                        <div class="product-title">Hamper 3</div>
+                        <div class="product-price">₹499</div>
+                    </div>
+                    <button class="add-cart-btn" data-product="Hamper 3" data-price="499">Add to cart</button>
+                </article>
+
+                <article class="product-card" data-product="Hamper 4" data-price="599" data-image="Hamper 4" data-items="Custom item 1|Custom item 2|Custom message card" data-description="Build your own custom hamper with curated goodies.">
+                    <div class="product-image">
+                        <img src="assets/custom-hamper.jpg" alt="Custom Hamper">
+                    </div>
+                    <div>
+                        <div class="product-title">Hamper 4</div>
+                        <div class="product-price">Custom</div>
+                    </div>
+                    <button class="curate-btn" type="button" onclick="window.location.href='custom-hamper.html'">Curate</button>
+                </article>
+            </div>
+        </section>
+
+        <section class="contact-section" id="contact">
+            <h2>Contact</h2>
+            <p>Have a question? Send us a message or reach out on Instagram.</p>
+            <a class="contact-link" href="mailto:hello@glamaura.com">hello@glamaura.com</a>
+        </section>
+
+        <section class="faq-section">
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    <span>When will you ship my order?</span>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Allow 3-4 business days for us to process and ship out your order.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    <span>I have a question about my order, who can I talk to?</span>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Please contact and message us on Instagram at <a href="https://www.instagram.com/theglam._.aura" target="_blank" rel="noreferrer">theglam._.aura</a>.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" type="button">
+                    <span>How can I pay for my order?</span>
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Payments are accepted via UPI and other online payment methods at checkout for a smooth and secure experience.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <p>Made with care for your hamper moments.</p>
+            <p>© 2026 Glam Aura</p>
+            <a class="instagram-link" href="https://www.instagram.com/theglam._.aura" target="_blank" rel="noreferrer">
+                <i class="fab fa-instagram"></i> DM on Instagram
+            </a>
+        </footer>
+    </main>
+
+    <div id="cartSummaryBar" class="cart-summary-bar">
+        <div class="cart-summary-thumb"><span class="material-symbols-outlined">shopping_cart</span></div>
+        <div class="cart-summary-content">
+            <div class="cart-summary-title" id="summaryTitle">Your cart</div>
+            <div class="cart-summary-price" id="summaryPrice">₹0</div>
+        </div>
+        <button class="cart-summary-button" id="summaryButton">View cart</button>
+    </div>
+
+    <div id="cartDrawerOverlay" class="cart-drawer-overlay">
+        <div class="cart-drawer">
+            <div class="cart-drawer-header">
+                <h3>Your Cart</h3>
+                <button class="drawer-close" id="drawerClose">×</button>
+            </div>
+            <div class="cart-drawer-body">
+                <div class="cart-status">
+                    <span id="cartDrawerCount">0</span>
+                    <span>item(s)</span>
+                </div>
+                <div class="cart-message">Have a buttery day!</div>
+                <div class="cart-items" id="cartItems"></div>
+                <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+                <div class="cart-note">
+                    <label for="cartNote">Add order note</label>
+                    <textarea id="cartNote" placeholder="Write a cute note here..."></textarea>
+                </div>
+            </div>
+            <div class="cart-drawer-footer">
+                <div class="cart-buttons">
+                    <button class="cart-action-btn secondary" id="viewCartButton">View Cart</button>
+                    <button class="cart-action-btn primary" id="checkoutButton">Check Out</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="productModalOverlay" class="product-modal-overlay">
+        <div class="product-modal">
+            <div class="product-modal-header">
+                <div class="product-modal-title" id="modalTitle">Hamper details</div>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="product-modal-body">
+                <div class="modal-image" id="modalImage">Product image</div>
+                <div class="modal-price" id="modalPrice">₹0</div>
+                <p class="modal-description" id="modalDescription">Product description</p>
+                <div class="modal-items">
+                    <div class="modal-items-title">What's inside</div>
+                    <ul class="modal-items-list" id="modalItemsList"></ul>
+                </div>
+            </div>
+            <div class="product-modal-footer">
+                <button class="cart-action-btn secondary" id="modalCloseButton">Close</button>
+                <button class="cart-action-btn primary" id="modalAddCartButton">Add to cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
