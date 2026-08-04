@@ -130,7 +130,7 @@ function createCartItemHtml(item) {
                 <span class="qty-display">${item.quantity}</span>
                 <button class="qty-btn plus" data-item-id="${escapeHtml(item.id)}">+</button>
             </div>
-            ${item.isCustom ? `<div class="cart-item-edit"><button class="edit-custom-btn" onclick="window.location.href='custom-hamper.html?edit=${encodeURIComponent(item.id)}'">Edit</button></div>` : ''}
+            ${item.isCustom ? `<div class="cart-item-edit"><span style="font-size: 0.85rem; color: #888;">Custom</span></div>` : ''}
         </div>
     `;
 }

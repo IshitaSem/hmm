@@ -3,386 +3,400 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glam Aura - Custom Hamper</title>
+    <title>Glam Aura - Build Your Own Hamper</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined';
-            font-variation-settings:
-            'FILL' 0,
-            'wght' 400,
-            'GRAD' 0,
-            'opsz' 24;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             line-height: 1;
         }
         body {
             font-family: 'Elms Sans', sans-serif;
             background-color: #FFE680;
         }
-        .custom-builder {
-            max-width: 1100px;
-            margin: 1rem auto 2rem;
-            padding: 1rem;
+        /* Layout */
+        .builder-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
-        .builder-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-        .builder-header h2 {
-            font-family: 'DynaPuff', cursive;
-            color: #3b1717;
-            margin: 0;
-        }
-        .builder-intro {
-            color: #3b1717;
-            line-height: 1.6;
-            max-width: 720px;
-        }
-        .builder-grid {
-            display: grid;
-            gap: 1.4rem;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        }
-        .builder-card {
-            background: #fff8d6;
-            border-radius: 24px;
-            padding: 1.2rem;
-            box-shadow: 0 14px 30px rgba(0,0,0,0.08);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
+        .header-section {
             text-align: center;
+            margin-bottom: 2rem;
         }
-        .selected-variant {
-            font-family: 'Elms Sans', sans-serif;
-            font-size: 0.9rem;
-            color: #3b1717;
-            background: rgba(255,255,255,0.7);
-            padding: 0.35rem 0.6rem;
-            border-radius: 12px;
-            margin-bottom: 0.5rem;
-        }
-        @media (max-width: 767px) {
-            .builder-grid {
-                grid-template-columns: repeat(2, minmax(140px, 1fr));
-            }
-            .builder-card {
-                padding: 1rem;
-            }
-        }
-        .builder-card img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 20px;
-            margin-bottom: 0.8rem;
-        }
-        .builder-card h3 {
-            margin: 0;
+        .header-section h2 {
             font-family: 'DynaPuff', cursive;
             color: #3b1717;
+            font-size: 2.5rem;
+            margin: 0 0 0.5rem;
         }
-        .builder-card button {
-            background-color: #3b1717;
-            color: #fff;
-            border: none;
-            border-radius: 999px;
-            padding: 0.75rem 1.25rem;
+        .header-section p {
+            color: #555;
+            font-size: 1.1rem;
+        }
+        
+        /* Step 1: Hamper Tiers */
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        .tier-card {
+            background: #fff8d6;
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 2px solid transparent;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
-        .builder-card button:hover {
-            background-color: #502f2f;
+        .tier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
-        .selection-panel {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .tier-card.selected {
+            border-color: #3b1717;
+            background: #fffdf1;
+            box-shadow: 0 0 0 4px rgba(59,23,23,0.1);
         }
-        .selection-panel h3 {
-            margin: 0;
+        .tier-card h3 {
             font-family: 'DynaPuff', cursive;
             color: #3b1717;
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
         }
-        .option-list {
-            display: grid;
-            gap: 0.8rem;
+        .tier-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #3b1717;
+            margin-bottom: 1rem;
         }
-        .option-item {
+        .tier-limit {
+            display: inline-block;
+            background: #ffe066;
+            color: #3b1717;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Step 2: Builder Layout */
+        .builder-layout {
             display: grid;
-            grid-template-columns: 100px 1fr auto;
-            gap: 0.9rem;
-            align-items: center;
-            padding: 0.95rem 1rem;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            display: none;
+        }
+        .builder-layout.active {
+            opacity: 1;
+            pointer-events: auto;
+            display: grid;
+        }
+
+        /* Products Section */
+        .toolbar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .search-box, .filter-box {
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid rgba(59,23,23,0.1);
+            background: #fff;
+            font-family: 'Elms Sans', sans-serif;
+            color: #3b1717;
+            flex: 1;
+            min-width: 200px;
+            outline: none;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+        .product-card {
+            background: #fff;
             border-radius: 20px;
-            background: #fff7cc;
-            border: 1px solid rgba(59,23,23,0.08);
-        }
-        .option-item img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 18px;
-        }
-        .option-body {
+            padding: 1rem;
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
-            text-align: left;
+            gap: 0.8rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+            position: relative;
         }
-        .option-body h4 {
-            margin: 0;
-            font-family: 'DynaPuff', cursive;
-            color: #3b1717;
-        }
-        .option-body select {
+        .product-card img {
             width: 100%;
-            padding: 0.7rem 0.9rem;
-            border-radius: 16px;
-            border: 1px solid #ccc;
-            font-family: 'Elms Sans', sans-serif;
-            color: #3b1717;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
         }
-        .quantity-controls {
-            display: inline-flex;
+        .product-badge {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            background: #3b1717;
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-cat {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+        }
+        .product-name {
+            font-weight: 700;
+            color: #3b1717;
+            font-size: 1.1rem;
+            margin: 0 0 0.5rem;
+        }
+        .product-price {
+            color: #555;
+            font-weight: 600;
+            margin-top: auto;
+        }
+        .add-btn {
+            background: #ffe066;
+            color: #3b1717;
+            border: none;
+            padding: 0.7rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
             align-items: center;
             gap: 0.5rem;
         }
-        .qty-btn-secondary {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 2px solid #3b1717;
-            background: #ffffff;
-            color: #3b1717;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: grid;
-            place-items: center;
+        .add-btn:hover:not(:disabled) {
+            background: #ffd633;
         }
-        .qty-count {
-            width: 30px;
-            text-align: center;
-            font-weight: 700;
-            color: #3b1717;
+        .add-btn:disabled {
+            background: #eee;
+            color: #aaa;
+            cursor: not-allowed;
         }
-        .custom-cart {
-            position: relative;
-            background: #ffffff;
+
+        /* Sticky Summary */
+        .summary-sidebar {
+            position: sticky;
+            top: 2rem;
+            height: fit-content;
+        }
+        .summary-card {
+            background: #fffdf1;
             border-radius: 24px;
-            box-shadow: 0 14px 30px rgba(0,0,0,0.08);
-            padding: 1.3rem;
-            margin-top: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 1px solid rgba(59,23,23,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        .custom-cart h3 {
-            margin: 0 0 1rem;
+        .summary-header h3 {
             font-family: 'DynaPuff', cursive;
             color: #3b1717;
+            margin: 0 0 0.5rem;
+            font-size: 1.5rem;
         }
-        .custom-cart-summary {
-            display: grid;
-            gap: 0.9rem;
+        .progress-container {
+            background: rgba(59,23,23,0.05);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
         }
-        .custom-bill {
-            background: linear-gradient(180deg,#fffef6,#fff9e8);
-            border: 1px solid rgba(59,23,23,0.06);
-            padding: 0.9rem;
-            border-radius: 14px;
+        .progress-bar {
+            height: 100%;
+            background: #3b1717;
+            width: 0%;
+            transition: width 0.3s ease;
         }
-
-        .bill-header {
-            font-family: 'DynaPuff', cursive;
-            color: #3b1717;
-            margin-bottom: 0.6rem;
-        }
-
-        .bill-line {
+        .progress-text {
             display: flex;
             justify-content: space-between;
-            padding: 0.4rem 0;
-            border-bottom: 1px dashed rgba(59,23,23,0.04);
-        }
-
-        .bill-total {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 0.6rem;
+            font-size: 0.9rem;
+            color: #3b1717;
             font-weight: 700;
-            color: #3b1717;
         }
-        .custom-cart-item {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            align-items: center;
-            padding: 0.95rem 1rem;
-            border-radius: 18px;
-            background: #fff7cc;
-        }
-        .custom-cart-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            font-weight: 700;
-            color: #3b1717;
-        }
-        .custom-cart-footer button {
-            background-color: #3b1717;
-            color: #fff;
-            border: none;
-            border-radius: 999px;
-            padding: 0.85rem 1.5rem;
-            cursor: pointer;
-        }
-        .custom-cart-bubble {
-            position: fixed;
-            left: 50%;
-            bottom: 1rem;
-            transform: translateX(-50%);
-            width: min(400px, calc(100% - 2rem));
+        
+        .visual-hamper {
+            background: rgba(255,255,255,0.6);
+            border-radius: 16px;
             padding: 1rem;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 18px 40px rgba(0,0,0,0.12);
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-        .custom-cart-bubble.active {
+            min-height: 120px;
             display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-content: flex-start;
         }
-        .custom-cart-bubble img {
+        .visual-item {
+            position: relative;
             width: 48px;
             height: 48px;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .visual-item img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 16px;
-            border: 1px solid rgba(59,23,23,0.12);
+            border-radius: 8px;
+            border: 1px solid rgba(59,23,23,0.1);
         }
-        .custom-cart-bubble p {
-            margin: 0;
-            color: #3b1717;
-            font-weight: 700;
-        }
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            display: none;
+        .visual-item .remove-btn {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 18px;
+            height: 18px;
+            background: #ff4d4d;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 2000;
-            padding: 1rem;
-        }
-        .modal-overlay.active {
-            display: flex;
-        }
-        .option-modal {
-            width: 100%;
-            max-width: 560px;
-            background: #ffffff;
-            border-radius: 30px;
-            padding: 1.5rem;
-            box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-            position: relative;
-            overflow: hidden;
-        }
-        .modal-close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            background: transparent;
-            border: none;
-            font-size: 1.6rem;
-            color: #3b1717;
+            font-size: 12px;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .modal-header {
-            margin-bottom: 1rem;
-        }
-        .modal-header h3 {
-            margin: 0;
-            font-family: 'DynaPuff', cursive;
-            color: #3b1717;
-        }
-        .modal-description {
-            margin-top: 0.5rem;
-            color: #555;
-            line-height: 1.6;
-        }
-        .variant-item {
-            display: grid;
-            grid-template-columns: 90px 1fr auto;
-            gap: 1rem;
-            align-items: center;
-            padding: 0.9rem 0.95rem;
-            border-radius: 20px;
-            background: #fff7cc;
-            border: 1px solid rgba(59,23,23,0.08);
-        }
-        .variant-item img {
-            width: 90px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 18px;
-        }
-        .variant-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-        }
-        .variant-stock {
-            color: #3b1717;
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-        .variant-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
-            align-items: center;
-        }
-        .variant-controls .qty-btn-secondary {
-            width: 34px;
-            height: 34px;
-        }
-        .variant-controls span {
-            font-weight: 700;
-            color: #3b1717;
-        }
-        .custom-cart-field {
-            margin-bottom: 1rem;
-        }
-        .custom-cart-field label {
-            display: block;
-            margin-bottom: 0.4rem;
-            font-weight: 700;
-            color: #3b1717;
-        }
-        .custom-cart-field input,
-        .custom-cart-field textarea {
+        .empty-visual {
             width: 100%;
-            padding: 0.95rem 1rem;
-            border-radius: 18px;
-            border: 1px solid rgba(59,23,23,0.16);
-            font-family: 'Elms Sans', sans-serif;
-            color: #3b1717;
-            background: #ffffff;
-            resize: vertical;
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            padding-top: 1rem;
         }
-        .custom-cart-field textarea {
-            min-height: 96px;
+
+        .summary-totals {
+            border-top: 2px dashed rgba(59,23,23,0.1);
+            padding-top: 1rem;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        .total-row.final {
+            color: #3b1717;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+        .checkout-btn {
+            background: #3b1717;
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .checkout-btn:hover:not(:disabled) {
+            background: #502f2f;
+        }
+        .checkout-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #3b1717;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 999px;
+            font-weight: 700;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(59,23,23,0.3);
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 992px) {
+            .builder-layout, .builder-layout.active {
+                grid-template-columns: 1fr;
+            }
+            .summary-sidebar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                z-index: 1000;
+            }
+            .summary-card {
+                border-radius: 24px 24px 0 0;
+                padding: 1rem;
+                gap: 1rem;
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            }
+            .visual-hamper {
+                display: none; /* Hide visual on mobile to save space */
+            }
+            .builder-container {
+                margin-bottom: 250px; /* Space for fixed bottom bar */
+            }
+        }
+        @media (max-width: 600px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .product-card {
+                padding: 0.8rem;
+            }
+            .product-card img {
+                height: 120px;
+            }
+            .product-badge {
+                top: 0.8rem;
+                left: 0.8rem;
+                font-size: 0.6rem;
+                padding: 0.2rem 0.5rem;
+            }
+            .product-name {
+                font-size: 0.95rem;
+            }
         }
     </style>
 </head>
@@ -400,8 +414,7 @@
         </div>
     </nav>
     <script>
-        // Minimal, self-contained cart count sync — mirrors loadCart()/getCartCount()
-        // in script.js without loading that whole file on this page.
+        // Minimal cart count sync
         (function () {
             try {
                 var raw = localStorage.getItem('glamAuraCartData');
@@ -412,339 +425,312 @@
                 }, 0);
                 var badge = document.getElementById('cartCount');
                 if (badge) badge.textContent = count;
-            } catch (e) {
-                // Fall back to the default "0" already in the markup.
-            }
+            } catch (e) {}
         })();
     </script>
 
-    <main class="custom-builder">
-        <div class="builder-header">
-            <div>
-                <h2>Curate Your Custom Hamper</h2>
-                <p class="builder-intro">Choose four special categories, pick your color variant, then add them to the hamper. Every custom hamper is stored as one cart item.</p>
-            </div>
-            <div>
-                <button class="cart-action-btn secondary" onclick="window.location.href='index.html'">Back to Shop</button>
-            </div>
+    <main class="builder-container">
+        <div class="header-section">
+            <h2>Build Your Own Hamper</h2>
+            <p>Select a hamper size below to start curating your perfect gift.</p>
         </div>
 
-        <div class="builder-grid" id="customOptions"></div>
+        <div class="tiers-grid" id="tiersGrid">
+            <!-- Rendered by JS -->
+        </div>
 
-        <div class="custom-cart">
-            <h3>Your Custom Hamper</h3>
-            <div class="custom-cart-field">
-                <label for="customHamperName">Name your hamper</label>
-                <input id="customHamperName" type="text" placeholder="E.g. Birthday Box" />
+        <div class="builder-layout" id="builderLayout">
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="toolbar">
+                    <input type="text" class="search-box" id="searchInput" placeholder="Search products...">
+                    <select class="filter-box" id="categoryFilter">
+                        <option value="All">All Categories</option>
+                        <option value="Hair Accessories">Hair Accessories</option>
+                        <option value="Handmade Jewellery">Handmade Jewellery</option>
+                        <option value="Crochet Collection">Crochet Collection</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Rendered by JS -->
+                </div>
             </div>
-            <div class="custom-cart-field">
-                <label for="customHamperNote">Hamper note</label>
-                <textarea id="customHamperNote" placeholder="Add a personal message or instruction..."></textarea>
-            </div>
-            <div class="custom-cart-summary" id="customCartSummary"></div>
-            <div class="custom-cart-footer">
-                <span id="customCartTotal">Total: ₹0</span>
-                <button id="customCheckoutBtn">Add Custom Hamper</button>
+
+            <!-- Sticky Summary -->
+            <div class="summary-sidebar">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <h3 id="summaryHamperName">Select a Hamper</h3>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="summaryProgressBar"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="summaryItemsCount">0 / 0 Items</span>
+                            <span id="summaryRemaining">0 slots left</span>
+                        </div>
+                    </div>
+
+                    <div class="visual-hamper" id="visualHamper">
+                        <!-- Rendered by JS -->
+                        <div class="empty-visual">Your hamper is empty. Add items!</div>
+                    </div>
+
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span>Estimated Product Value:</span>
+                            <span id="estValue">₹0</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Amount to Pay:</span>
+                            <span id="finalPrice">₹0</span>
+                        </div>
+                    </div>
+
+                    <button class="checkout-btn" id="addToCartBtn" disabled>Add to Cart</button>
+                </div>
             </div>
         </div>
     </main>
 
-    <div class="custom-cart-bubble" id="customCartBubble">
-        <img src="" alt="Added item" id="bubbleImage">
-        <p>Added to custom hamper</p>
-        <button class="cart-action-btn primary" onclick="document.getElementById('customCartBubble').classList.remove('active')">OK</button>
-    </div>
-
-    <div class="modal-overlay" id="optionModalOverlay">
-        <div class="option-modal">
-            <button class="modal-close" onclick="closeOptionModal()">×</button>
-            <div class="modal-header">
-                <h3 id="optionModalTitle"></h3>
-                <p class="modal-description">Choose a variant and add it to your custom hamper. Stock: 1 per variant.</p>
-            </div>
-            <div id="optionModalList"></div>
-        </div>
-    </div>
+    <div class="toast" id="toastMsg">Maximum items reached for this hamper.</div>
 
     <script>
-        const customOptions = [
-            {
-                id: 'bracelet',
-                label: 'Bracelet',
-                icon: 'assets/custom hamper/green bracelet.jpg',
-                variants: [
-                    { label: 'Green Bracelet', price: 199, image: 'assets/custom hamper/green bracelet.jpg', stock: 3 },
-                    { label: 'Red Bracelet', price: 199, image: 'assets/custom hamper/red bracelet.jpg', stock: 2 },
-                    { label: 'White Bracelet', price: 199, image: 'assets/custom hamper/white bracelet.jpg', stock: 1 }
-                ]
-            },
-            {
-                id: 'earrings',
-                label: 'Earrings',
-                icon: 'assets/custom hamper/blue earings.jpg',
-                variants: [
-                    { label: 'Blue Earrings', price: 149, image: 'assets/custom hamper/blue earings.jpg', stock: 3 },
-                    { label: 'White Earrings', price: 149, image: 'assets/custom hamper/white earings.jpg', stock: 2 },
-                    { label: 'Brown Cluther', price: 149, image: 'assets/custom hamper/brown cluther.jpg', stock: 1 }
-                ]
-            },
-            {
-                id: 'clutch',
-                label: 'Clutch',
-                icon: 'assets/custom hamper/pink cluther.jpg',
-                variants: [
-                    { label: 'Pink Clutch', price: 249, image: 'assets/custom hamper/pink cluther.jpg', stock: 2 },
-                    { label: 'Red Clutch', price: 249, image: 'assets/custom hamper/red cluther.jpg', stock: 1 },
-                    { label: 'Blue Clutch', price: 249, image: 'assets/custom hamper/brown cluther.jpg', stock: 3 }
-                ]
-            },
-            {
-                id: 'crochet',
-                label: 'Crochet',
-                icon: 'assets/custom hamper/crochet tulip boquet.png',
-                variants: [
-                    { label: 'Crochet Tulip Bouquet', price: 179, image: 'assets/custom hamper/crochet tulip boquet.png', stock: 2 }
-                ]
-            }
+        // Data Configuration
+        const tiers = [
+            { id: 'mini', name: 'Mini Hamper', price: 299, limit: 5 },
+            { id: 'classic', name: 'Classic Hamper', price: 499, limit: 8 },
+            { id: 'premium', name: 'Premium Hamper', price: 799, limit: 12 },
+            { id: 'luxury', name: 'Luxury Hamper', price: 1199, limit: 18 }
         ];
 
-        // customCart stores multiple selected items as an array so users can add more than one
-        const customCart = [];
-        // editingId will hold an existing custom item id when editing
-        let editingId = null;
-        const optionModalOverlay = document.getElementById('optionModalOverlay');
-        const customNameInput = document.getElementById('customHamperName');
-        const customNoteInput = document.getElementById('customHamperNote');
-        let activeOption = null;
+        const products = [
+            // Hair Accessories
+            { id: 'h1', name: 'Hawaiian Clutcher', category: 'Hair Accessories', price: 50, image: 'assets/custom hamper/placeholder.jpg', badge: 'Best Seller' },
+            { id: 'h2', name: 'Sunflower Clutcher', category: 'Hair Accessories', price: 50, image: 'assets/custom hamper/placeholder.jpg' },
+            { id: 'h3', name: 'Tulip Bow Clip', category: 'Hair Accessories', price: 70, image: 'assets/custom hamper/placeholder.jpg' },
+            { id: 'h4', name: 'Tulip Scrunchie', category: 'Hair Accessories', price: 60, image: 'assets/custom hamper/placeholder.jpg' },
+            { id: 'h5', name: 'Hearty Clip', category: 'Hair Accessories', price: 40, image: 'assets/custom hamper/placeholder.jpg' },
+            { id: 'h6', name: 'Check Clip', category: 'Hair Accessories', price: 40, image: 'assets/custom hamper/placeholder.jpg' },
+            { id: 'h7', name: 'Aesthetic Clip', category: 'Hair Accessories', price: 45, image: 'assets/custom hamper/placeholder.jpg' },
+            
+            // Handmade Jewellery
+            { id: 'j1', name: 'Handmade Necklace', category: 'Handmade Jewellery', price: 180, image: 'assets/custom hamper/placeholder.jpg', badge: 'Handmade' },
+            { id: 'j2', name: 'Pendant', category: 'Handmade Jewellery', price: 120, image: 'assets/custom hamper/placeholder.jpg', badge: 'Handmade' },
+            { id: 'j3', name: 'Bracelet', category: 'Handmade Jewellery', price: 100, image: 'assets/custom hamper/green bracelet.jpg', badge: 'Handmade' },
+            { id: 'j4', name: 'Earrings', category: 'Handmade Jewellery', price: 55, image: 'assets/custom hamper/blue earings.jpg', badge: 'Handmade' },
+            
+            // Crochet Collection
+            { id: 'c1', name: 'Crochet Tulip Bouquet', category: 'Crochet Collection', price: 179, image: 'assets/custom hamper/crochet tulip boquet.png', badge: 'Handmade' },
+            { id: 'c2', name: 'Crochet Keychain', category: 'Crochet Collection', price: 89, image: 'assets/custom hamper/placeholder.jpg', badge: 'New' },
+            
+            // Accessories
+            { id: 'a1', name: 'Keychain', category: 'Accessories', price: 80, image: 'assets/custom hamper/placeholder.jpg' },
+            { id: 'a2', name: 'Phone Charm', category: 'Accessories', price: 120, image: 'assets/custom hamper/placeholder.jpg' }
+        ];
 
-        function getCustomHamperMetadata() {
-            return {
-                customName: (customNameInput?.value || '').trim() || 'Custom Hamper',
-                customNote: (customNoteInput?.value || '').trim() || ''
-            };
+        // State
+        let selectedTier = null;
+        let selectedItems = []; // Array of product objects { product, instanceId }
+        
+        // DOM Elements
+        const tiersGrid = document.getElementById('tiersGrid');
+        const builderLayout = document.getElementById('builderLayout');
+        const productsGrid = document.getElementById('productsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        
+        const summaryHamperName = document.getElementById('summaryHamperName');
+        const summaryProgressBar = document.getElementById('summaryProgressBar');
+        const summaryItemsCount = document.getElementById('summaryItemsCount');
+        const summaryRemaining = document.getElementById('summaryRemaining');
+        const estValueEl = document.getElementById('estValue');
+        const finalPriceEl = document.getElementById('finalPrice');
+        const visualHamper = document.getElementById('visualHamper');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        const toastMsg = document.getElementById('toastMsg');
+
+        // Initialization
+        function init() {
+            renderTiers();
+            renderProducts();
+            
+            searchInput.addEventListener('input', renderProducts);
+            categoryFilter.addEventListener('change', renderProducts);
+            addToCartBtn.addEventListener('click', addToCart);
         }
 
-        // read query param 'edit' to pre-select editing id if provided
-        function getEditIdFromQuery() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                return params.get('edit');
-            } catch (e) {
-                return null;
-            }
-        }
-
-        function renderCustomOptions() {
-            const container = document.getElementById('customOptions');
-            container.innerHTML = customOptions.map(option => {
-                // compute total selected count for this option
-                const selectedCount = customCart.filter(i => i.optionId === option.id).reduce((s, it) => s + (it.quantity || 0), 0);
-                const selectedLabel = selectedCount ? `${selectedCount} selected` : '';
-                return `
-                <div class="builder-card" data-id="${option.id}">
-                    <img src="${option.icon}" alt="${option.label}">
-                    <h3>${option.label}</h3>
-                    ${selectedLabel ? `<div class="selected-variant">${selectedLabel}</div>` : ''}
-                    <button type="button" onclick="openOptionModal('${option.id}')">Select</button>
+        // Render Tiers
+        function renderTiers() {
+            tiersGrid.innerHTML = tiers.map(tier => `
+                <div class="tier-card ${selectedTier?.id === tier.id ? 'selected' : ''}" onclick="selectTier('${tier.id}')">
+                    <h3>${tier.name}</h3>
+                    <div class="tier-price">₹${tier.price}</div>
+                    <div class="tier-limit">Up to ${tier.limit} items</div>
                 </div>
-            `;
-            }).join('');
+            `).join('');
         }
 
-        function openOptionModal(optionId) {
-            activeOption = customOptions.find(entry => entry.id === optionId);
-            if (!activeOption) return;
-            document.getElementById('optionModalTitle').textContent = `${activeOption.label} Variants`;
-            const list = document.getElementById('optionModalList');
-            list.innerHTML = activeOption.variants.map(variant => {
-                // count current quantity for this variant across customCart
-                const currentQty = customCart.filter(i => i.optionId === optionId && i.variantLabel === variant.label).reduce((s, it) => s + (it.quantity || 0), 0);
-                const stockLimit = variant.stock || 1;
-                const disabledPlus = currentQty >= stockLimit ? 'disabled' : '';
-                return `
-                    <div class="variant-item" data-option="${optionId}" data-variant="${variant.label}">
-                        <img src="${variant.image}" alt="${variant.label}">
-                        <div class="variant-meta">
-                            <h4>${variant.label}</h4>
-                            <span>₹${variant.price}</span>
-                            <span class="variant-stock">Stock: ${variant.stock || 1}</span>
-                        </div>
-                        <div class="variant-controls">
-                            <button type="button" class="qty-btn-secondary" onclick="decrementVariant('${optionId}', '${variant.label}')">−</button>
-                            <span class="qty-count" id="count-${optionId}-${variant.label}">${currentQty}</span>
-                            <button type="button" class="qty-btn-secondary" ${disabledPlus} onclick="incrementVariant('${optionId}', '${variant.label}')">+</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            optionModalOverlay.classList.add('active');
-        }
-
-        function closeOptionModal() {
-            optionModalOverlay.classList.remove('active');
-            activeOption = null;
-        }
-
-        function incrementVariant(optionId, variantLabel) {
-            const option = customOptions.find(entry => entry.id === optionId);
-            const variant = option.variants.find(v => v.label === variantLabel);
-            const stockLimit = variant.stock || 1;
-            // try to find existing entry
-            const existing = customCart.find(i => i.optionId === optionId && i.variantLabel === variantLabel);
-            const currentQty = customCart.filter(i => i.optionId === optionId && i.variantLabel === variantLabel).reduce((s, it) => s + (it.quantity || 0), 0);
-            if (currentQty >= stockLimit) return;
-            if (existing) {
-                existing.quantity = (existing.quantity || 1) + 1;
-            } else {
-                customCart.push({ optionId, variantLabel, quantity: 1, price: variant.price, image: variant.image });
-            }
-            const countEl = document.getElementById(`count-${optionId}-${variantLabel}`);
-            if (countEl) countEl.textContent = customCart.filter(i => i.optionId === optionId && i.variantLabel === variantLabel).reduce((s, it) => s + it.quantity, 0);
-            updateOptionButtons();
-            updateCustomCart();
-            showCartBubble(variant.image);
-        }
-
-        function decrementVariant(optionId, variantLabel) {
-            const idx = customCart.findIndex(i => i.optionId === optionId && i.variantLabel === variantLabel);
-            if (idx === -1) return;
-            if (customCart[idx].quantity > 1) {
-                customCart[idx].quantity -= 1;
-            } else {
-                customCart.splice(idx, 1);
-            }
-            const countEl = document.getElementById(`count-${optionId}-${variantLabel}`);
-            if (countEl) countEl.textContent = customCart.filter(i => i.optionId === optionId && i.variantLabel === variantLabel).reduce((s, it) => s + it.quantity, 0);
-            updateOptionButtons();
-            updateCustomCart();
-        }
-
-        function updateOptionButtons() {
-            if (!activeOption) return;
-            activeOption.variants.forEach(variant => {
-                const currentQty = customCart.filter(i => i.optionId === activeOption.id && i.variantLabel === variant.label).reduce((s, it) => s + it.quantity, 0);
-                const stockLimit = variant.stock || 1;
-                const plusBtn = document.querySelector(`button[onclick="incrementVariant('${activeOption.id}', '${variant.label}')"]`);
-                if (plusBtn) {
-                    plusBtn.disabled = currentQty >= stockLimit;
-                    plusBtn.style.cursor = currentQty >= stockLimit ? 'not-allowed' : 'pointer';
+        // Select Tier
+        function selectTier(tierId) {
+            const newTier = tiers.find(t => t.id === tierId);
+            
+            if (selectedTier && selectedItems.length > newTier.limit) {
+                // Warning if downgrading and already over limit
+                if(!confirm(`Switching to ${newTier.name} will keep only your first ${newTier.limit} items. Continue?`)) {
+                    return;
                 }
-            });
+                // Trim items to new limit
+                selectedItems = selectedItems.slice(0, newTier.limit);
+            }
+            
+            selectedTier = newTier;
+            renderTiers();
+            builderLayout.classList.add('active');
+            
+            // Scroll to builder smoothly
+            setTimeout(() => {
+                builderLayout.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+            
+            updateSummary();
+            renderProducts(); // Re-render to update disabled states
         }
 
-        function updateCustomCart() {
-            const summary = document.getElementById('customCartSummary');
-            // group items by variant label and option
-            const grouped = {};
-            customCart.forEach(item => {
-                const key = `${item.optionId}:::${item.variantLabel}`;
-                if (!grouped[key]) grouped[key] = { ...item };
-                else grouped[key].quantity = (grouped[key].quantity || 0) + (item.quantity || 0);
+        // Render Products
+        function renderProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const category = categoryFilter.value;
+            
+            const filtered = products.filter(p => {
+                const matchSearch = p.name.toLowerCase().includes(searchTerm);
+                const matchCategory = category === 'All' || p.category === category;
+                return matchSearch && matchCategory;
             });
-            const groupedArr = Object.values(grouped);
-            const total = groupedArr.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-            if (groupedArr.length === 0) {
-                summary.innerHTML = '<p>No items selected yet.</p>';
-            } else {
-                // render a single bill-style box
-                summary.innerHTML = `
-                    <div class="custom-bill">
-                        <div class="bill-header">Your Custom Hamper</div>
-                        <div class="bill-lines">
-                            ${groupedArr.map(it => `<div class="bill-line"><span>${it.variantLabel} × ${it.quantity}</span><span>₹${it.price * it.quantity}</span></div>`).join('')}
-                        </div>
-                        <div class="bill-total">Total: <strong>₹${total}</strong></div>
+            
+            const isAtLimit = selectedTier && selectedItems.length >= selectedTier.limit;
+            
+            productsGrid.innerHTML = filtered.map(product => `
+                <div class="product-card">
+                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='assets/custom-hamper.jpg'">
+                    <div class="product-info">
+                        <div class="product-cat">${product.category}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">₹${product.price}</div>
                     </div>
-                `;
-            }
-            document.getElementById('customCartTotal').textContent = `Total: ₹${total}`;
-            // re-render options so selected badges/counts appear
-            renderCustomOptions();
+                    <button class="add-btn" onclick="addItem('${product.id}')" ${isAtLimit ? 'disabled' : ''}>
+                        <span class="material-symbols-outlined">add</span> Add to Hamper
+                    </button>
+                </div>
+            `).join('');
         }
 
-        // Load any existing custom hamper from main cart when an edit id is provided via ?edit=<id>
-        function loadExistingCustomHamper() {
-            try {
-                const editId = getEditIdFromQuery();
-                if (!editId) return; // only load when explicit edit requested
-                const cart = JSON.parse(localStorage.getItem('glamAuraCartData') || '{"items":[],"note":""}');
-                const custom = (cart.items || []).find(i => i.id === editId);
-                if (!custom) return;
-                editingId = editId;
-                // prefill name and note
-                if (custom.customName) customNameInput.value = custom.customName;
-                if (custom.customNote) customNoteInput.value = custom.customNote;
-
-                // parse items like "Label x1|Other Label x1"
-                if (custom.items) {
-                    const parts = custom.items.split('|').map(p => p.trim()).filter(Boolean);
-                    parts.forEach(part => {
-                        const match = part.match(/^(.*) x(\d+)$/);
-                        if (!match) return;
-                        const label = match[1].trim();
-                        const qty = Number(match[2]) || 1;
-                        // find which option/variant matches this label
-                        for (const option of customOptions) {
-                            const variant = option.variants.find(v => v.label === label);
-                            if (variant) {
-                                // convert to array entries
-                                customCart.push({ optionId: option.id, variantLabel: variant.label, quantity: qty, price: variant.price, image: variant.image });
-                                break;
-                            }
-                        }
-                    });
-                }
-            } catch (e) {
-                console.warn('Unable to load existing custom hamper', e);
-            }
-        }
-
-        function showCartBubble(imageSrc) {
-            const bubble = document.getElementById('customCartBubble');
-            const bubbleImage = document.getElementById('bubbleImage');
-            bubbleImage.src = imageSrc;
-            bubble.classList.add('active');
-            setTimeout(() => bubble.classList.remove('active'), 2000);
-        }
-
-        document.getElementById('customCheckoutBtn').addEventListener('click', () => {
-            const total = customCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            if (total === 0) {
-                alert('Please add at least one custom item to your hamper.');
+        // Add Item
+        function addItem(productId) {
+            if (!selectedTier || selectedItems.length >= selectedTier.limit) {
+                showToast("Maximum items reached for this hamper.");
                 return;
             }
-            const { customName, customNote } = getCustomHamperMetadata();
-            const items = customCart.map(item => `${item.variantLabel} x${item.quantity}`).join('|');
-            const existing = JSON.parse(localStorage.getItem('glamAuraCartData') || '{"items":[],"note":""}');
-            // determine id (preserve editing id if present)
-            const newId = editingId || `Custom Hamper - ${Date.now()}`;
+            
+            const product = products.find(p => p.id === productId);
+            selectedItems.push({
+                product,
+                instanceId: Date.now() + Math.random().toString(36).substr(2, 5)
+            });
+            
+            updateSummary();
+            renderProducts();
+            
+            if (selectedItems.length >= selectedTier.limit) {
+                showToast("Maximum items reached for this hamper.");
+            }
+        }
+
+        // Remove Item
+        function removeItem(instanceId) {
+            selectedItems = selectedItems.filter(item => item.instanceId !== instanceId);
+            updateSummary();
+            renderProducts();
+        }
+
+        // Update Summary & Visuals
+        function updateSummary() {
+            if (!selectedTier) return;
+            
+            const count = selectedItems.length;
+            const limit = selectedTier.limit;
+            const remaining = limit - count;
+            const progress = (count / limit) * 100;
+            const estValue = selectedItems.reduce((sum, item) => sum + item.product.price, 0);
+            
+            summaryHamperName.textContent = selectedTier.name;
+            summaryItemsCount.textContent = `${count} / ${limit} Items`;
+            summaryRemaining.textContent = `${remaining} slot${remaining !== 1 ? 's' : ''} left`;
+            summaryProgressBar.style.width = `${progress}%`;
+            
+            estValueEl.textContent = `₹${estValue}`;
+            finalPriceEl.textContent = `₹${selectedTier.price}`;
+            
+            addToCartBtn.disabled = count === 0;
+            addToCartBtn.textContent = count === 0 ? 'Add items first' : `Add to Cart (₹${selectedTier.price})`;
+            
+            // Visual Hamper
+            if (count === 0) {
+                visualHamper.innerHTML = '<div class="empty-visual">Your hamper is empty. Add items!</div>';
+            } else {
+                visualHamper.innerHTML = selectedItems.map(item => `
+                    <div class="visual-item" title="${item.product.name}">
+                        <img src="${item.product.image}" alt="${item.product.name}" onerror="this.src='assets/custom-hamper.jpg'">
+                        <div class="remove-btn" onclick="removeItem('${item.instanceId}')">×</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Show Toast
+        let toastTimeout;
+        function showToast(message) {
+            toastMsg.textContent = message;
+            toastMsg.classList.add('show');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toastMsg.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add to Cart
+        function addToCart() {
+            if (selectedItems.length === 0) return;
+            
+            const itemsString = selectedItems.map(i => i.product.name).reduce((acc, name) => {
+                acc[name] = (acc[name] || 0) + 1;
+                return acc;
+            }, {});
+            
+            const formattedItems = Object.entries(itemsString).map(([name, qty]) => `${name} x${qty}`).join(' | ');
+            
             const customProduct = {
-                id: newId,
-                name: customName,
-                customName,
-                customNote,
-                price: total,
+                id: `Custom Hamper - ${Date.now()}`,
+                name: selectedTier.name,
+                customName: selectedTier.name,
+                customNote: `Includes: ${formattedItems}`,
+                price: selectedTier.price,
                 image: 'assets/custom-hamper.jpg',
-                items,
+                items: formattedItems,
                 quantity: 1,
                 isCustom: true
             };
-            if (editingId) {
-                const idx = (existing.items || []).findIndex(i => i.id === editingId);
-                if (idx >= 0) existing.items[idx] = customProduct;
-                else existing.items.push(customProduct);
-            } else {
-                existing.items.push(customProduct);
-            }
+            
+            const existing = JSON.parse(localStorage.getItem('glamAuraCartData') || '{"items":[],"note":""}');
+            existing.items.push(customProduct);
             localStorage.setItem('glamAuraCartData', JSON.stringify(existing));
+            
             window.location.href = 'checkout.html';
-        });
+        }
 
-        // render options first, then load any existing custom hamper and update UI
-        renderCustomOptions();
-        loadExistingCustomHamper();
-        updateCustomCart();
+        // Run init
+        init();
     </script>
 </body>
 </html>
