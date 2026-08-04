@@ -3,13 +3,23 @@ let currentViewingOrderId = null;
 
 // Wait for Firebase API to initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // We add a small delay to ensure window.firebaseAPI is populated by the module
     setTimeout(() => {
-        if (!window.firebaseAPI) {
+        if (!window.firebaseAuthAPI || !window.firebaseAPI) {
             alert("Firebase not initialized correctly.");
             return;
         }
-        loadOrders();
+        
+        // Protect the page
+        window.firebaseAuthAPI.checkAuthState((user) => {
+            if (user) {
+                // User is signed in, show logout and load orders
+                document.getElementById('logoutBtn').style.display = 'block';
+                loadOrders();
+            } else {
+                // No user is signed in, redirect to login
+                window.location.href = 'admin-login.html';
+            }
+        });
     }, 500);
 
     // Event Listeners
@@ -23,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('updateStatusBtn').addEventListener('click', handleStatusUpdate);
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await window.firebaseAuthAPI.logoutAdmin();
+    });
 });
 
 async function loadOrders() {
@@ -129,6 +142,10 @@ async function viewOrder(orderId) {
         </div>
     `).join('');
 
+    const hasScreenshot = order.paymentScreenshotURL ? `<div class="detail-row" style="margin-top: 0.5rem;"><a href="${order.paymentScreenshotURL}" target="_blank" style="color: #007bff; text-decoration: underline;">View Payment Screenshot</a></div>` : '';
+    const confirmBtnHtml = order.paymentStatus !== 'Verified' ? `<button class="cart-action-btn primary" onclick="verifyPayment('${order.id}')" style="width: auto; padding: 0.4rem 1rem; font-size: 0.9rem; background: #28a745;">Confirm Payment</button>` : '';
+    const rejectBtnHtml = order.paymentStatus !== 'Verified' && order.paymentStatus !== 'Rejected' ? `<button class="cart-action-btn secondary" onclick="rejectPayment('${order.id}')" style="width: auto; padding: 0.4rem 1rem; font-size: 0.9rem; color: #dc3545; border-color: #dc3545;">Reject Payment</button>` : '';
+
     body.innerHTML = `
         <div style="margin-bottom: 1.5rem;">
             <h3 style="font-family: 'DynaPuff'; color: #8c4b0f; margin-bottom: 0.2rem;">Order #${order.id}</h3>
@@ -141,6 +158,7 @@ async function viewOrder(orderId) {
             <div class="detail-row"><span>Email:</span> <strong>${escapeHtml(cust.email)}</strong></div>
             <div class="detail-row"><span>Phone:</span> <strong>${escapeHtml(cust.whatsapp)}</strong></div>
             <div class="detail-row"><span>Receiver Phone:</span> <strong>${escapeHtml(cust.receiverPhone)}</strong></div>
+            <div class="detail-row"><span>Instagram:</span> <strong>${escapeHtml(order.instagramId || 'N/A')}</strong></div>
             <div class="detail-row"><span>Address:</span> <span>${escapeHtml(cust.house)}, ${escapeHtml(cust.street)}, ${escapeHtml(cust.city)}, ${escapeHtml(cust.state)} - ${escapeHtml(cust.pincode)}</span></div>
             ${cust.landmark ? `<div class="detail-row"><span>Landmark:</span> <span>${escapeHtml(cust.landmark)}</span></div>` : ''}
         </div>
@@ -175,13 +193,57 @@ async function viewOrder(orderId) {
             <div class="detail-row" style="border-top: 1px solid #ccc; padding-top: 0.5rem; margin-top: 0.5rem; font-weight: bold; font-size: 1.1rem; color: #8c4b0f;">
                 <span>Grand Total:</span> <span>₹${sum.grandTotal || 0}</span>
             </div>
-            <div class="detail-row" style="margin-top: 0.5rem;"><span>Payment Method:</span> <span>${escapeHtml(sum.paymentMethod || 'N/A')}</span></div>
+            <div class="detail-row" style="margin-top: 0.5rem;"><span>Payment Method:</span> <strong>${escapeHtml(order.paymentMethod || sum.paymentMethod || 'N/A')}</strong></div>
+            <div class="detail-row"><span>Payment Status:</span> <strong>${escapeHtml(order.paymentStatus || 'N/A')}</strong></div>
+            ${hasScreenshot}
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                ${confirmBtnHtml}
+                ${rejectBtnHtml}
+            </div>
         </div>
     `;
 
     document.getElementById('orderModalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
+
+// Make sure these are on the window object since they are called via inline onclick
+window.verifyPayment = async function(orderId) {
+    if (!confirm("Are you sure you want to confirm this payment?")) return;
+    try {
+        await window.firebaseAPI.verifyPayment(orderId);
+        
+        // Update local state
+        const orderIndex = allOrders.findIndex(o => o.id === orderId);
+        if (orderIndex > -1) {
+            allOrders[orderIndex].paymentStatus = 'Verified';
+            allOrders[orderIndex].status = 'Processing';
+        }
+        renderOrders();
+        viewOrder(orderId); // refresh modal
+        alert("Payment verified successfully.");
+    } catch (e) {
+        alert("Error verifying payment: " + e.message);
+    }
+};
+
+window.rejectPayment = async function(orderId) {
+    if (!confirm("Are you sure you want to reject this payment?")) return;
+    try {
+        await window.firebaseAPI.rejectPayment(orderId);
+        
+        // Update local state
+        const orderIndex = allOrders.findIndex(o => o.id === orderId);
+        if (orderIndex > -1) {
+            allOrders[orderIndex].paymentStatus = 'Rejected';
+        }
+        renderOrders();
+        viewOrder(orderId); // refresh modal
+        alert("Payment rejected.");
+    } catch (e) {
+        alert("Error rejecting payment: " + e.message);
+    }
+};
 
 function closeOrderModal() {
     document.getElementById('orderModalOverlay').classList.remove('active');

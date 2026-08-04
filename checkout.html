@@ -126,6 +126,10 @@
                         <label for="recipientName" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Recipient Name</label>
                         <input type="text" id="recipientName" placeholder="Who is receiving this hamper?" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
                     </div>
+                    <div>
+                        <label for="instagramId" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717;">Instagram Username (Optional for updates)</label>
+                        <input type="text" id="instagramId" placeholder="@yourusername" style="width:100%; padding:0.8rem; border-radius:14px; border:1px solid #ccc; font-family:'Elms Sans';">
+                    </div>
                 </div>
 
                 <div style="margin-top: 1rem;">
@@ -143,29 +147,61 @@
                     <textarea id="specialRequests" placeholder="e.g. Please use pink wrapping paper and add a birthday card."></textarea>
                 </div>
 
-                <!-- 4. Invoice & Payment Options -->
+                <!-- 4. Payment Selection & Order Submission -->
                 <div class="payment-options-section" style="margin-top: 2rem; background-color: #ffffff; padding: 1.5rem; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 14px 30px rgba(0,0,0,0.03);">
-                    <h3 style="font-family: 'DynaPuff', cursive; color: #3b1717; margin-bottom: 1.5rem; font-size: 1.3rem; text-align: center;">Invoice & Payment Options</h3>
+                    <h3 style="font-family: 'DynaPuff', cursive; color: #3b1717; margin-bottom: 1.5rem; font-size: 1.3rem; text-align: center;">Payment Method</h3>
                     
-                    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-                        <!-- Option 1 -->
-                        <button type="submit" class="cart-action-btn primary" id="generateInvoiceBtn" style="flex: 1; min-width: 200px; justify-content: center;">
-                            📄 Generate Invoice
-                        </button>
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                         
-                        <!-- Option 2 -->
-                        <button type="button" class="cart-action-btn secondary" id="payViaQRBtn" style="flex: 1; min-width: 200px; justify-content: center;" onclick="document.getElementById('qrCodeContainer').style.display = document.getElementById('qrCodeContainer').style.display === 'none' ? 'block' : 'none';">
-                            📱 Pay via QR Code
-                        </button>
-                    </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <label style="flex: 1; min-width: 200px; padding: 1rem; border: 2px solid #f8dc8e; border-radius: 14px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-family: 'DynaPuff'; color: #3b1717; background-color: #fff7cc;">
+                                <input type="radio" name="paymentMethod" value="UPI QR" checked onchange="togglePaymentSections()">
+                                UPI QR Payment
+                            </label>
+                            
+                            <label style="flex: 1; min-width: 200px; padding: 1rem; border: 2px solid #f8dc8e; border-radius: 14px; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; font-family: 'DynaPuff'; color: #3b1717; background-color: #fff7cc;">
+                                <input type="radio" name="paymentMethod" value="Instagram DM" onchange="togglePaymentSections()">
+                                Instagram DM Payment
+                            </label>
+                        </div>
 
-                    <!-- QR Code Display Area -->
-                    <div id="qrCodeContainer" style="display: none; margin-top: 2rem; text-align: center;">
-                        <img src="assets/payment-qr-placeholder.png" alt="Payment QR Code" style="max-width: 250px; border-radius: 12px; border: 2px solid #f8dc8e;">
-                        <p style="font-family: 'Elms Sans', sans-serif; color: #555; font-size: 0.95rem; margin-top: 1rem;">Scan to complete your payment.</p>
+                        <!-- UPI QR Section -->
+                        <div id="upiPaymentSection" style="text-align: center; padding: 1.5rem; background: #fafafa; border-radius: 14px; border: 1px dashed #ccc;">
+                            <h4 style="font-family: 'DynaPuff'; color: #8c4b0f; margin-bottom: 1rem;">Scan QR to Pay</h4>
+                            <img src="assets/payment-qr.png" alt="Payment QR Code" style="max-width: 200px; border-radius: 12px; border: 2px solid #f8dc8e;" onerror="this.src='assets/payment-qr-placeholder.png'">
+                            <p style="font-family: 'Elms Sans'; color: #3b1717; font-weight: bold; margin-top: 0.5rem;">UPI ID: your-upi-id</p>
+                            
+                            <div style="margin-top: 1.5rem; text-align: left;">
+                                <label for="paymentScreenshot" style="font-family: 'DynaPuff'; font-size: 0.95rem; color: #3b1717; display: block; margin-bottom: 0.5rem;">Upload payment screenshot after payment *</label>
+                                <input type="file" id="paymentScreenshot" accept="image/*" style="width: 100%; padding: 0.8rem; border-radius: 14px; border: 1px solid #ccc; font-family: 'Elms Sans'; background: #fff;">
+                            </div>
+                        </div>
+
+                        <!-- Instagram DM Section -->
+                        <div id="igPaymentSection" style="display: none; padding: 1.5rem; background: #fafafa; border-radius: 14px; border: 1px dashed #ccc; font-family: 'Elms Sans'; color: #555;">
+                            <h4 style="font-family: 'DynaPuff'; color: #8c4b0f; margin-bottom: 0.5rem;">Instagram DM Instructions</h4>
+                            <ol style="margin-left: 1.5rem; margin-bottom: 0;">
+                                <li>Submit your order here to generate the invoice.</li>
+                                <li>Take a screenshot of the generated invoice.</li>
+                                <li>Send the invoice screenshot to our Instagram DM to get payment details.</li>
+                                <li>Send us the payment screenshot on Instagram to confirm your order.</li>
+                            </ol>
+                        </div>
+
+                        <button type="submit" class="cart-action-btn primary" id="generateInvoiceBtn" style="width: 100%; justify-content: center; padding: 1rem; font-size: 1.1rem; margin-top: 1rem;">
+                            🛍️ Submit Order & Generate Invoice
+                        </button>
                     </div>
                 </div>
             </form>
+            
+            <script>
+                function togglePaymentSections() {
+                    const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+                    document.getElementById('upiPaymentSection').style.display = method === 'UPI QR' ? 'block' : 'none';
+                    document.getElementById('igPaymentSection').style.display = method === 'Instagram DM' ? 'block' : 'none';
+                }
+            </script>
 
             <!-- 5. Invoice Action Toolbar -->
             <div class="invoice-actions" id="invoiceActions" style="display:none;">
@@ -236,6 +272,7 @@
         </div>
     </div>
     <script type="module" src="js/firestore.js"></script>
+    <script src="js/cloudinary.js"></script>
     <script src="script.js"></script>
     <!-- PDF generation libraries (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

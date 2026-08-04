@@ -2,6 +2,7 @@ import { db } from './firebase.js';
 import { 
     collection, 
     addDoc, 
+    setDoc,
     getDocs, 
     getDoc, 
     doc, 
@@ -15,19 +16,34 @@ import {
 const ORDERS_COLLECTION = 'orders';
 
 /**
+ * Generate a new order ID without saving
+ * @returns {string} A new order ID
+ */
+export const generateOrderId = () => {
+    return doc(collection(db, ORDERS_COLLECTION)).id;
+};
+
+/**
  * Save a new order to Firestore
  * @param {Object} orderData - The complete order details
+ * @param {string} [orderId] - Optional pre-generated order ID
  * @returns {Promise<string>} The ID of the saved order document
  */
-export const saveOrder = async (orderData) => {
+export const saveOrder = async (orderData, orderId) => {
     try {
         const orderPayload = {
             ...orderData,
             status: orderData.status || 'Pending',
             timestamp: serverTimestamp()
         };
-        const docRef = await addDoc(collection(db, ORDERS_COLLECTION), orderPayload);
-        return docRef.id;
+        
+        if (orderId) {
+            await setDoc(doc(db, ORDERS_COLLECTION, orderId), orderPayload);
+            return orderId;
+        } else {
+            const docRef = await addDoc(collection(db, ORDERS_COLLECTION), orderPayload);
+            return docRef.id;
+        }
     } catch (error) {
         console.error("Error adding order: ", error);
         throw error;
@@ -104,11 +120,48 @@ export const deleteOrder = async (orderId) => {
     }
 };
 
+/**
+ * Verify a payment (updates status and adds timestamp)
+ * @param {string} orderId 
+ */
+export const verifyPayment = async (orderId) => {
+    try {
+        const docRef = doc(db, ORDERS_COLLECTION, orderId);
+        await updateDoc(docRef, { 
+            paymentStatus: 'Verified',
+            status: 'Processing',
+            paymentVerifiedAt: serverTimestamp()
+        });
+    } catch (error) {
+        console.error("Error verifying payment: ", error);
+        throw error;
+    }
+};
+
+/**
+ * Reject a payment
+ * @param {string} orderId 
+ */
+export const rejectPayment = async (orderId) => {
+    try {
+        const docRef = doc(db, ORDERS_COLLECTION, orderId);
+        await updateDoc(docRef, { 
+            paymentStatus: 'Rejected' 
+        });
+    } catch (error) {
+        console.error("Error rejecting payment: ", error);
+        throw error;
+    }
+};
+
 // Expose functions globally so they can be accessed by non-module scripts (like script.js)
 window.firebaseAPI = {
+    generateOrderId,
     saveOrder,
     getOrders,
     getOrderById,
     updateOrderStatus,
-    deleteOrder
+    deleteOrder,
+    verifyPayment,
+    rejectPayment
 };

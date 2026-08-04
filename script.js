@@ -718,6 +718,21 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', async
         note: document.getElementById('checkoutNote')?.value || ''
     };
 
+    const instagramId = document.getElementById('instagramId')?.value || '';
+    const paymentMethodEl = document.querySelector('input[name="paymentMethod"]:checked');
+    const paymentMethod = paymentMethodEl ? paymentMethodEl.value : 'UPI QR';
+    const screenshotInput = document.getElementById('paymentScreenshot');
+    
+    let screenshotFile = null;
+
+    if (paymentMethod === 'UPI QR') {
+        if (!screenshotInput || !screenshotInput.files || screenshotInput.files.length === 0) {
+            alert("Please upload your payment screenshot before submitting.");
+            return;
+        }
+        screenshotFile = screenshotInput.files[0];
+    }
+
     // Prepare Invoice / Order Totals
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const deliveryFee = getDeliveryFeeForPincode(customerData.pincode);
@@ -727,7 +742,7 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', async
     const customHampers = cart.items.filter(item => item.isCustom || item.id === 'Hamper 4');
     const standardCart = cart.items.filter(item => !item.isCustom && item.id !== 'Hamper 4');
 
-    const orderPayload = {
+    let orderPayload = {
         customerDetails: customerData,
         cart: standardCart,
         customHamper: customHampers,
@@ -736,8 +751,11 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', async
             deliveryCharge: deliveryFee,
             discount: 0,
             grandTotal: grandTotal,
-            paymentMethod: 'Pending (QR/Invoice)', // User pays via QR after invoice generation
+            paymentMethod: paymentMethod,
         },
+        paymentMethod: paymentMethod,
+        paymentStatus: 'Pending Verification',
+        instagramId: instagramId,
         status: 'Pending'
     };
 
@@ -750,22 +768,46 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', async
             submitBtn.disabled = true;
         }
 
-        // Save order to Firestore if API is available
-        if (window.firebaseAPI && window.firebaseAPI.saveOrder) {
-            await window.firebaseAPI.saveOrder(orderPayload);
-            alert("Order placed successfully! We have saved your details.");
-            
-            // Clear cart upon successful placement
-            localStorage.removeItem(CART_STORAGE_KEY);
-            updateCartCount();
-            updateCartDrawer();
-            populateCheckoutPage();
-        } else {
-            console.warn("Firebase API not ready, proceeding to invoice generation only.");
+        // Ensure Firebase API is ready
+        if (!window.firebaseAPI || !window.firebaseAPI.saveOrder || !window.firebaseAPI.generateOrderId) {
+            throw new Error("Firebase API not ready.");
         }
 
+        // Generate ID first
+        const orderId = window.firebaseAPI.generateOrderId();
+
+        // Upload screenshot if present using Cloudinary
+        if (screenshotFile && window.cloudinaryAPI) {
+            if (submitBtn) submitBtn.innerHTML = '⏳ Uploading Screenshot...';
+            // Cloudinary upload doesn't require orderId, but we pass the file
+            const uploadResult = await window.cloudinaryAPI.uploadPaymentScreenshot(screenshotFile);
+            if (uploadResult.success) {
+                orderPayload.paymentScreenshotURL = uploadResult.url;
+            } else {
+                throw new Error("Screenshot upload failed: " + uploadResult.error);
+            }
+        }
+
+        if (submitBtn) submitBtn.innerHTML = '⏳ Saving Order...';
+        
+        // Save order with the pre-generated ID
+        await window.firebaseAPI.saveOrder(orderPayload, orderId);
+        
+        alert("Order placed successfully! We have saved your details.");
+        
+        // Add instagramId and paymentMethod to customerData for invoice generation compatibility
+        customerData.instagramId = instagramId;
+        customerData.paymentMethod = paymentMethod;
+        customerData.paymentStatus = 'Pending Verification';
+
+        // Clear cart upon successful placement
+        localStorage.removeItem(CART_STORAGE_KEY);
+        updateCartCount();
+        updateCartDrawer();
+        populateCheckoutPage();
+
     } catch (error) {
-        alert("Failed to save order. Please try again or contact support.");
+        alert("Failed to process order: " + error.message);
         if (submitBtn) {
             submitBtn.innerHTML = originalBtnText;
             submitBtn.disabled = false;

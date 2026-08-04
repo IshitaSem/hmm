@@ -248,6 +248,7 @@ function generateInvoice(customerData) {
                 <p>${escapeHtml(cityLine)}</p>
                 <p>Delivery: ${formatDisplayDate(customerData.deliveryDate)}${deliveryTimeText}</p>
                 <p>Occasion: ${escapeHtml(customerData.occasion)}</p>
+                ${customerData.instagramId ? `<p>Instagram: ${escapeHtml(customerData.instagramId)}</p>` : ''}
             </div>
         </div>
 
@@ -279,8 +280,13 @@ function generateInvoice(customerData) {
         ${specialRequestsBlock}
 
         <div class="invoice-card payment-card">
-            <h4>Payment</h4>
+            <h4>Payment Details</h4>
             <div class="payment-content">
+                <div style="margin-bottom: 1rem; text-align: left;">
+                    <p><strong>Method:</strong> ${escapeHtml(customerData.paymentMethod || 'QR/Invoice')}</p>
+                    <p><strong>Status:</strong> ${escapeHtml(customerData.paymentStatus || 'Pending')}</p>
+                </div>
+                ${(customerData.paymentMethod === 'UPI QR' || !customerData.paymentMethod) ? `
                 <div class="qr-block">
                     <p class="qr-title">My UPI QR Code</p>
                     <div class="qr-img-wrap">
@@ -290,6 +296,9 @@ function generateInvoice(customerData) {
                     <p class="upi-id">UPI ID: ${UPI_ID}</p>
                 </div>
                 <p class="payment-note">Please complete payment using the QR code above. After payment you can download the invoice, print it, or send it to us while contacting us on Instagram.</p>
+                ` : `
+                <p class="payment-note">Please send this invoice screenshot to us via Instagram DM to proceed with your payment.</p>
+                `}
             </div>
         </div>
 

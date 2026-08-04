@@ -133,7 +133,10 @@
     <nav class="navbar">
         <div class="nav-container">
             <a class="nav-brand" href="index.html">GLAM AURA</a>
-            <div style="font-family: 'DynaPuff'; color: #3b1717;">Admin Dashboard</div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="font-family: 'DynaPuff'; color: #3b1717;">Admin Dashboard</div>
+                <button id="logoutBtn" class="cart-action-btn secondary" style="padding: 0.4rem 1rem; font-size: 0.9rem; display: none;">Logout</button>
+            </div>
         </div>
     </nav>
 
@@ -199,6 +202,7 @@
         </div>
     </div>
 
+    <script type="module" src="js/auth.js"></script>
     <script type="module" src="js/firestore.js"></script>
     <script src="js/admin.js"></script>
 </body>

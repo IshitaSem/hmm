@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glam Aura - Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .login-title {
+            font-family: 'DynaPuff';
+            color: #3b1717;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: left;
+        }
+        .login-form label {
+            font-family: 'DynaPuff';
+            color: #3b1717;
+            font-size: 0.95rem;
+        }
+        .login-form input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 14px;
+            border: 1px solid #ccc;
+            font-family: 'Elms Sans';
+            margin-top: 0.5rem;
+        }
+        #loginError {
+            color: #dc3545;
+            font-family: 'Elms Sans';
+            font-size: 0.9rem;
+            display: none;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-brand" href="index.html">GLAM AURA</a>
+            <div style="font-family: 'DynaPuff'; color: #3b1717;">Secure Portal</div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="login-container">
+            <h2 class="login-title">Admin Login</h2>
+            <div id="loginError"></div>
+            <form id="adminLoginForm" class="login-form">
+                <div>
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" required placeholder="admin@glamaura.com">
+                </div>
+                <div>
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="cart-action-btn primary" id="loginBtn" style="margin-top: 1rem;">Log In</button>
+            </form>
+        </div>
+    </main>
+
+    <script type="module" src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                const loginBtn = document.getElementById('loginBtn');
+                const errorDiv = document.getElementById('loginError');
+
+                loginBtn.innerHTML = 'Logging in... ⏳';
+                loginBtn.disabled = true;
+                errorDiv.style.display = 'none';
+
+                if (window.firebaseAuthAPI) {
+                    const result = await window.firebaseAuthAPI.loginAdmin(email, password);
+                    if (result.success) {
+                        window.location.href = 'admin.html';
+                    } else {
+                        errorDiv.textContent = result.error;
+                        errorDiv.style.display = 'block';
+                        loginBtn.innerHTML = 'Log In';
+                        loginBtn.disabled = false;
+                    }
+                } else {
+                    errorDiv.textContent = 'Authentication module not loaded.';
+                    errorDiv.style.display = 'block';
+                    loginBtn.innerHTML = 'Log In';
+                    loginBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
