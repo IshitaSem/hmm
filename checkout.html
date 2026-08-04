@@ -48,7 +48,8 @@
             <div id="invoiceContainer" style="background-color:#fff7cc; padding:1.5rem; border-radius:24px; margin: 1.5rem 0; text-align:left; font-family:'Elms Sans'; border:1px dashed #3b1717;">
                 <h3 style="font-family:'DynaPuff'; margin-bottom: 0.5rem; color:#3b1717;">Bill Summary</h3>
                 <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><span>Items Total:</span><span id="invoiceSubtotal">₹0</span></div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><span>Delivery Fee:</span><span id="invoiceDelivery">₹0 (Free)</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; color:#555;"><span>Package Weight:</span><span id="invoiceWeight">0 grams</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><span>India Post Shipping:</span><span id="invoiceDelivery">₹0</span></div>
                 <hr style="border:0; border-top:1px solid rgba(59,23,23,0.2); margin:0.5rem 0;">
                 <div style="display:flex; justify-content:space-between; font-weight:700; color:#8c4b0f; font-size:1.1rem;"><span>Grand Total:</span><span id="invoiceGrandTotal">₹0</span></div>
             </div>
@@ -273,6 +274,7 @@
     </div>
     <script type="module" src="js/firestore.js"></script>
     <script src="js/cloudinary.js"></script>
+    <script src="js/shipping.js"></script>
     <script src="script.js"></script>
     <!-- PDF generation libraries (CDN) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>

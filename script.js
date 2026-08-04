@@ -49,22 +49,33 @@ const productImages = {
     "Hamper 4": "assets/custom-hamper.jpg"
 };
 
-const deliveryFeeMap = {
-    "110001": 50,
-    "400001": 60,
-    "560001": 75
+const productWeights = {
+    "Hamper 1": 400,
+    "Hamper 2": 600,
+    "Hamper 3": 900
 };
 
-function getDeliveryFeeForPincode(pin) {
-    const cleaned = String(pin || '').trim();
-    if (!cleaned || cleaned.length !== 6 || !/^[0-9]{6}$/.test(cleaned)) {
-        return 0;
-    }
-    return deliveryFeeMap[cleaned] ?? 50;
-}
-
-function formatDeliveryFee(fee) {
-    return fee === 0 ? '₹0 (Free)' : formatPrice(fee);
+// Calculate total weight in grams
+function calculateCartWeight(cart) {
+    if (!cart || !cart.items || cart.items.length === 0) return 0;
+    
+    return cart.items.reduce((total, item) => {
+        let itemWeight = 0;
+        
+        if (item.isCustom || item.id === 'Hamper 4') {
+            // Base basket weight + 150g per selected item
+            let customItemCount = 0;
+            if (item.items) {
+                // items is usually a comma separated string
+                customItemCount = String(item.items).split(',').length;
+            }
+            itemWeight = 300 + (customItemCount * 150);
+        } else {
+            itemWeight = productWeights[item.id] || 500; // default 500g if not found
+        }
+        
+        return total + (itemWeight * item.quantity);
+    }, 0);
 }
 
 // Hide cart summary bar on checkout page
@@ -587,7 +598,8 @@ function populateCheckoutPage() {
     }
 
     const total = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const deliveryFee = getDeliveryFeeForPincode(addressPincodeEl?.value);
+    const totalWeight = calculateCartWeight(cart);
+    const shippingFee = window.shippingAPI ? window.shippingAPI.calculateShipping(totalWeight) : 0;
 
     // Fill structural review grid elements
     container.innerHTML = cart.items.map(item => `
@@ -622,9 +634,11 @@ function populateCheckoutPage() {
         checkoutNote.value = cart.note || '';
     }
 
+    const weightEl = document.getElementById('invoiceWeight');
+    if (weightEl) weightEl.textContent = `${totalWeight} grams`;
     if (subtotalEl) subtotalEl.textContent = formatPrice(total);
-    if (deliveryEl) deliveryEl.textContent = formatDeliveryFee(deliveryFee);
-    if (grandTotalEl) grandTotalEl.textContent = formatPrice(total + deliveryFee);
+    if (deliveryEl) deliveryEl.textContent = formatPrice(shippingFee);
+    if (grandTotalEl) grandTotalEl.textContent = formatPrice(total + shippingFee);
 }
 
 // Welcome Popup Logic
@@ -735,8 +749,9 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', async
 
     // Prepare Invoice / Order Totals
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const deliveryFee = getDeliveryFeeForPincode(customerData.pincode);
-    const grandTotal = subtotal + deliveryFee;
+    const totalWeight = calculateCartWeight(cart);
+    const shippingFee = window.shippingAPI ? window.shippingAPI.calculateShipping(totalWeight) : 0;
+    const grandTotal = subtotal + shippingFee;
 
     // Filter Custom Hamper items (if any)
     const customHampers = cart.items.filter(item => item.isCustom || item.id === 'Hamper 4');
@@ -748,10 +763,12 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', async
         customHamper: customHampers,
         orderSummary: {
             itemsTotal: subtotal,
-            deliveryCharge: deliveryFee,
+            shippingCost: shippingFee,
+            packageWeight: totalWeight,
             discount: 0,
             grandTotal: grandTotal,
             paymentMethod: paymentMethod,
+            shippingMethod: "India Post"
         },
         paymentMethod: paymentMethod,
         paymentStatus: 'Pending Verification',

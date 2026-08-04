@@ -160,8 +160,10 @@ function generateInvoice(customerData) {
 
     // Reuse existing cart / pricing logic from script.js
     const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const deliveryFee = getDeliveryFeeForPincode(customerData.pincode);
-    const grandTotal = subtotal + deliveryFee;
+    const totalWeight = calculateCartWeight(cart);
+    const shippingFee = window.shippingAPI ? window.shippingAPI.calculateShipping(totalWeight) : 0;
+    const grandTotal = subtotal + shippingFee;
+    const cartCount = getCartCount(cart);
 
     // Invoice identity (generated locally in the browser)
     const now = new Date();
@@ -272,8 +274,9 @@ function generateInvoice(customerData) {
         </div>
 
         <div class="invoice-summary">
-            <div class="invoice-summary-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
-            <div class="invoice-summary-row"><span>Delivery Charges</span><span>${formatDeliveryFee(deliveryFee)}</span></div>
+            <div class="invoice-summary-row"><span>Subtotal (${cartCount} items)</span><span>${formatPrice(subtotal)}</span></div>
+            <div class="invoice-summary-row" style="color: #555;"><span>Package Weight</span><span>${totalWeight} grams</span></div>
+            <div class="invoice-summary-row"><span>India Post Shipping</span><span>${formatPrice(shippingFee)}</span></div>
             <div class="invoice-summary-row grand"><span>Grand Total</span><span>${formatPrice(grandTotal)}</span></div>
         </div>
 
