@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glam Aura - Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Elms+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            line-height: 1;
+        }
+        .admin-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .admin-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .admin-controls input, .admin-controls select {
+            padding: 0.8rem;
+            border-radius: 14px;
+            border: 1px solid #ccc;
+            font-family: 'Elms Sans';
+            outline: none;
+            min-width: 200px;
+        }
+        .orders-table-wrapper {
+            background: #fff;
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 14px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Elms Sans';
+            text-align: left;
+        }
+        .orders-table th {
+            font-family: 'DynaPuff';
+            color: #3b1717;
+            padding: 1rem;
+            border-bottom: 2px solid #f8dc8e;
+            white-space: nowrap;
+        }
+        .orders-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            color: #555;
+            vertical-align: middle;
+        }
+        .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status-Pending { background: #fff3cd; color: #856404; }
+        .status-Processing { background: #cce5ff; color: #004085; }
+        .status-Shipped { background: #d4edda; color: #155724; }
+        .status-Delivered { background: #d1ecf1; color: #0c5460; }
+        .status-Cancelled { background: #f8d7da; color: #721c24; }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #8c4b0f;
+            transition: color 0.2s;
+            padding: 0.2rem;
+        }
+        .action-btn:hover {
+            color: #3b1717;
+        }
+        .action-btn.delete {
+            color: #dc3545;
+        }
+        .action-btn.delete:hover {
+            color: #a71d2a;
+        }
+
+        /* Order Details Modal (Reuse existing modal styles with tweaks) */
+        .order-modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'Elms Sans';
+            color: #333;
+        }
+        .detail-section {
+            background: #fff7cc;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px dashed #3b1717;
+        }
+        .detail-section h4 {
+            font-family: 'DynaPuff';
+            color: #3b1717;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="nav-brand" href="index.html">GLAM AURA</a>
+            <div style="font-family: 'DynaPuff'; color: #3b1717;">Admin Dashboard</div>
+        </div>
+    </nav>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h2 style="font-family: 'DynaPuff'; color: #3b1717;">Orders</h2>
+            <div class="admin-controls">
+                <input type="text" id="searchInput" placeholder="Search by name, email, or order ID...">
+                <select id="statusFilter">
+                    <option value="all">All Statuses</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <button class="cart-action-btn primary" id="refreshBtn" style="padding: 0.8rem 1.5rem; font-size: 1rem; width: auto;">Refresh</button>
+            </div>
+        </div>
+
+        <div id="loadingIndicator" style="text-align: center; padding: 3rem; font-family: 'DynaPuff'; color: #8c4b0f;">
+            Loading orders... ⏳
+        </div>
+
+        <div class="orders-table-wrapper" style="display: none;" id="tableWrapper">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <!-- Orders injected here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Order Details Modal -->
+    <div id="orderModalOverlay" class="product-modal-overlay">
+        <div class="product-modal" style="max-width: 600px; width: 90%;">
+            <div class="product-modal-header">
+                <div class="product-modal-title">Order Details</div>
+                <button class="modal-close" id="adminModalClose">×</button>
+            </div>
+            <div class="order-modal-body" id="orderModalBody">
+                <!-- Details injected here -->
+            </div>
+            <div class="product-modal-footer" style="justify-content: space-between; border-top: 1px solid #eee; padding-top: 1rem;">
+                <select id="updateStatusSelect" style="padding: 0.6rem; border-radius: 8px; font-family: 'Elms Sans'; border: 1px solid #ccc;">
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <button class="cart-action-btn primary" id="updateStatusBtn" style="width: auto; padding: 0.6rem 1.5rem;">Update Status</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/firestore.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

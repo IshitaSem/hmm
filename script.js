@@ -687,8 +687,8 @@ function setupInstagramLinks() {
 setupWelcomePopup();
 setupInstagramLinks();
 
-// Hook up form submission to generate the invoice (GitHub Pages compatible, client-side only)
-document.getElementById('customerDetailsForm')?.addEventListener('submit', function(e) {
+// Hook up form submission to generate the invoice and save to Firestore (GitHub Pages compatible, client-side only)
+document.getElementById('customerDetailsForm')?.addEventListener('submit', async function(e) {
     e.preventDefault(); // Prevents empty native form reloads
 
     const cart = loadCart();
@@ -718,8 +718,69 @@ document.getElementById('customerDetailsForm')?.addEventListener('submit', funct
         note: document.getElementById('checkoutNote')?.value || ''
     };
 
+    // Prepare Invoice / Order Totals
+    const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const deliveryFee = getDeliveryFeeForPincode(customerData.pincode);
+    const grandTotal = subtotal + deliveryFee;
+
+    // Filter Custom Hamper items (if any)
+    const customHampers = cart.items.filter(item => item.isCustom || item.id === 'Hamper 4');
+    const standardCart = cart.items.filter(item => !item.isCustom && item.id !== 'Hamper 4');
+
+    const orderPayload = {
+        customerDetails: customerData,
+        cart: standardCart,
+        customHamper: customHampers,
+        orderSummary: {
+            itemsTotal: subtotal,
+            deliveryCharge: deliveryFee,
+            discount: 0,
+            grandTotal: grandTotal,
+            paymentMethod: 'Pending (QR/Invoice)', // User pays via QR after invoice generation
+        },
+        status: 'Pending'
+    };
+
+    const submitBtn = document.getElementById('generateInvoiceBtn');
+    const originalBtnText = submitBtn ? submitBtn.innerHTML : '📄 Generate Invoice';
+
+    try {
+        if (submitBtn) {
+            submitBtn.innerHTML = '⏳ Saving Order...';
+            submitBtn.disabled = true;
+        }
+
+        // Save order to Firestore if API is available
+        if (window.firebaseAPI && window.firebaseAPI.saveOrder) {
+            await window.firebaseAPI.saveOrder(orderPayload);
+            alert("Order placed successfully! We have saved your details.");
+            
+            // Clear cart upon successful placement
+            localStorage.removeItem(CART_STORAGE_KEY);
+            updateCartCount();
+            updateCartDrawer();
+            populateCheckoutPage();
+        } else {
+            console.warn("Firebase API not ready, proceeding to invoice generation only.");
+        }
+
+    } catch (error) {
+        alert("Failed to save order. Please try again or contact support.");
+        if (submitBtn) {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        }
+        return; // Halt if order save fails
+    }
+
+    if (submitBtn) {
+        submitBtn.innerHTML = originalBtnText;
+        submitBtn.disabled = false;
+    }
+
     // Generate the invoice (defined in invoice.js)
     if (typeof generateInvoice === 'function') {
+        // Pass original customer data as expected by existing invoice.js
         generateInvoice(customerData);
     } else {
         alert("Invoice module is not loaded. Please check your connection and refresh.");
